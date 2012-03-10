@@ -22,12 +22,12 @@ namespace RadKatanaBrothers
         }
         public void AddEntity<T>(string id) where T : Entity
         {
-            entities.Add(id, Factory.Produce<T>(id: id));
+            entities.Add(id, Factory.Produce<T>());
         }
 
         public void AddManager<T>(string id) where T : Manager
         {
-            managers.Add(id, Factory.Produce<T>(id: id));
+            managers.Add(id, Factory.Produce<T>());
         }
 
         public T GetEntity<T>(string id) where T : Entity

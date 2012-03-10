@@ -7,5 +7,9 @@ namespace RadKatanaBrothers
 {
     public class GraphicsRepresentation : Representation
     {
+        public GraphicsRepresentation(dynamic Settings)
+        {
+
+        }
     }
 }

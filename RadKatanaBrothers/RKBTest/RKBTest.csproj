@@ -33,6 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
     <Reference Include="Microsoft.Xna.Framework.Avatar, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL" />
@@ -59,14 +60,12 @@
   <ItemGroup>
     <Compile Include="CoreTest.cs" />
     <Compile Include="EntityTest.cs" />
+    <Compile Include="FactoryTest.cs" />
+    <Compile Include="GameParamsTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WorldTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RadKatanaBrothers\RadKatanaBrothersContent\RadKatanaBrothersContent.contentproj">
-      <Project>{E16645AB-EF15-4260-9AD6-D048146107E9}</Project>
-      <Name>RadKatanaBrothersContent %28Content%29</Name>
-    </ProjectReference>
     <ProjectReference Include="..\RadKatanaBrothers\RadKatanaBrothers\RadKatanaBrothers.csproj">
       <Project>{694A0254-6BAE-4E38-9720-A6B795BCB70A}</Project>
       <Name>RadKatanaBrothers</Name>

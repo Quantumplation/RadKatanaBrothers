@@ -7,5 +7,8 @@ namespace RadKatanaBrothers
 {
     public class RenderManager : Manager
     {
+        public override void AddRepresentation(Representation rep)
+        {
+        }
     }
 }

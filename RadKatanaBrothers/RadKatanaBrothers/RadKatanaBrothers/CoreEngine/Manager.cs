@@ -5,7 +5,8 @@ using System.Text;
 
 namespace RadKatanaBrothers
 {
-    public class Manager
+    public abstract class Manager
     {
+        public abstract void AddRepresentation(Representation rep);
     }
 }

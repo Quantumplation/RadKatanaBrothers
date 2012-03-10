@@ -18,7 +18,7 @@ namespace RadKatanaBrothers
 
         public void AddRepresentation<T>(string id) where T : Representation
         {
-            representations.Add(id, Factory.Produce<T>(id: id));
+            representations.Add(id, Factory.Produce<T>());
         }
         public T GetRepresentation<T>(string id) where T : Representation
         {
