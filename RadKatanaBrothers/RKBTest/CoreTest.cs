@@ -23,13 +23,12 @@ namespace RKBTest
             world.AddEntity<Player>(id: "Player");
 
             Entity player = world.GetEntity<Player>(id: "Player");
-            Manager render = world.GetManager<RenderManager>(id: "RenderManager");
-
-            if (player != null)
-            {
+            RenderManager render = world.GetManager<RenderManager>(id: "RenderManager");
+            //if (player != null)
+            //{
                 player.AddRepresentation<GraphicsRepresentation>(id: "Graphics");
                 Property<int> health = player.AddProperty<int>(id: "Health", value: 100);
-            }
+            //}
         }
     }
 }

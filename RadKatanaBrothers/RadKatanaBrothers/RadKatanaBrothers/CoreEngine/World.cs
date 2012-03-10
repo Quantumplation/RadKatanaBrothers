@@ -20,12 +20,11 @@ namespace RadKatanaBrothers
         {
             throw new NotImplementedException();
         }
-        public void AddEntity<T>(string id) where T : Entity
+        public void AddEntity<T>(string id) where T : Entity, new()
         {
             entities.Add(id, Factory.Produce<T>());
         }
-
-        public void AddManager<T>(string id) where T : Manager
+        public void AddManager<T>(string id) where T : Manager, new()
         {
             managers.Add(id, Factory.Produce<T>());
         }
@@ -38,6 +37,12 @@ namespace RadKatanaBrothers
         public T GetManager<T>(string id) where T : Manager
         {
             return (managers[id] as T);
+        }
+
+        public void RunManagers()
+        {
+            foreach (var manager in managers.Values)
+                manager.Run();
         }
     }
 }

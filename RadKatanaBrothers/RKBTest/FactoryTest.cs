@@ -29,6 +29,10 @@ namespace RKBTest
             {
                 added = true;
             }
+            public override void Run()
+            {
+                
+            }
         }
         protected class RepresentationTestHelper : Representation
         {

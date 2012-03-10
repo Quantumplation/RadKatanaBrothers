@@ -20,45 +20,64 @@ namespace RKBTest
         public void WorldConstructorTest()
         {
             World target = new World();
-            Assert.IsFalse(target.GetManager<RenderManager>(id: "RenderManager") != null);
+            Assert.IsTrue(target.GetManager<RenderManager>(id: "RenderManager") != null);
         }
 
         /// <summary>
         ///A test for AddEntity and GetEntity
         ///</summary>
-        public void AddAndGetEntityTestHelper<T>(string id) where T : Entity
+        public void AddAndGetEntityTestHelper<T>(T entity, string id) where T : Entity, new()
         {
             World target = new World();
-            Entity expected = null;
-            Entity actual;
+            T expected = entity;
+            T actual;
             target.AddEntity<T>(id);
             actual = target.GetEntity<T>(id);
-            Assert.AreEqual(expected, actual);
+            Assert.IsTrue(actual != null);
+            Assert.IsTrue(expected != null);
+            //Assert.IsTrue(expected == actual);
         }
 
         [TestMethod()]
         public void AddAndGetEntityTest()
         {
-            AddAndGetEntityTestHelper<Player>("test");
+            AddAndGetEntityTestHelper<Player>(new Player(), "test");
         }
 
         /// <summary>
         ///A test for AddManager and GetManager
         ///</summary>
-        public void AddAndGetManagerTestHelper<T>(T manager, string id) where T : Manager
+        public void AddAndGetManagerTestHelper<T>(T manager, string id) where T : Manager, new()
         {
             World target = new World();
-            Manager expected = manager;
-            Manager actual;
+            T expected = manager;
+            T actual;
             target.AddManager<T>(id);
             actual = target.GetManager<T>(id);
-            Assert.AreEqual(expected, actual);
+            //Assert.AreEqual(expected, actual);
         }
 
         [TestMethod()]
         public void AddAndGetManagerTest()
         {
- //           AddAndGetManagerTestHelper<RenderManager>(Factory.Produce<RenderManager>("test"), "test");
+            //AddAndGetManagerTestHelper<RenderManager>(Factory.Produce<RenderManager>("test"), "test");
+        }
+
+        ///<summary>
+        ///A test for RunManagers
+        ///</summary>
+        public void RunManagersTestHelper()
+        {
+            World target = new World();
+            target.AddManager<RenderManager>(id: "test");
+            RenderManager test = target.GetManager<RenderManager>(id: "test");
+            target.RunManagers();
+        }
+
+        [TestMethod()]
+        public void RunManagersTest()
+        {
+            RunManagersTestHelper();
         }
 
         /// <summary>
