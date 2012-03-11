@@ -16,9 +16,9 @@ namespace RadKatanaBrothers
             properties = new Dictionary<string, IProperty>();
         }
 
-        public void AddRepresentation<T>(string id) where T : Representation
+        public void AddRepresentation<T>(string id, GameParams settings) where T : Representation
         {
-            representations.Add(id, Factory.Produce<T>());
+            representations.Add(id, Factory.Produce<T>(settings));
         }
         public T GetRepresentation<T>(string id) where T : Representation
         {

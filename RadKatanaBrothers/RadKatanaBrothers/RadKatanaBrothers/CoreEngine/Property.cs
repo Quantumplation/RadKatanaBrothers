@@ -11,7 +11,7 @@ namespace RadKatanaBrothers
 
     public class Property<T> : IProperty
     {
-        T Value
+        public T Value
         {
             get;
             set;

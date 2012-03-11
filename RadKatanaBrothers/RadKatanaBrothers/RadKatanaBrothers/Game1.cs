@@ -18,6 +18,7 @@ namespace RadKatanaBrothers
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        World world;
 
         public Game1()
         {
@@ -34,7 +35,14 @@ namespace RadKatanaBrothers
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
+            world = new World();
+            world.AddEntity<Player>(id: "Player");
+            Entity player = world.GetEntity<Player>(id: "Player");
+            player.AddRepresentation<GraphicsRepresentation>(id: "Graphics", settings: new GameParams
+            {
+                {"spriteName", "Sprites/test"},
+                {"location", player.AddProperty<Vector2>("location", new Vector2(320, 240))}
+            });
             base.Initialize();
         }
 
@@ -46,7 +54,7 @@ namespace RadKatanaBrothers
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
+            world.GetManager<RenderManager>(id: "graphics").LoadContent(Content, spriteBatch);
             // TODO: use this.Content to load your game content here
         }
 
@@ -71,7 +79,6 @@ namespace RadKatanaBrothers
                 this.Exit();
 
             // TODO: Add your update logic here
-
             base.Update(gameTime);
         }
 
@@ -84,7 +91,7 @@ namespace RadKatanaBrothers
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-
+            world.RunAllManagers();
             base.Draw(gameTime);
         }
     }

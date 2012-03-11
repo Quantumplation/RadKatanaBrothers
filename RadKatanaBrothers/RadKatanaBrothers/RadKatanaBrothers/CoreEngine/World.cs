@@ -14,19 +14,26 @@ namespace RadKatanaBrothers
         {
             entities = new Dictionary<string, Entity>();
             managers = new Dictionary<string, Manager>();
-            AddManager<RenderManager>(id: "RenderManager");
+            RenderManager render = new RenderManager();
+            AddManager<RenderManager>(id: "graphics");
+            Factory.RegisterManager<RenderManager>(GetManager<RenderManager>(id: "graphics"), typeof(GraphicsRepresentation));
+            Factory.RegisterCallback<Entity>((settings) => new Entity());
+            Factory.RegisterCallback<Player>((settings) => new Player());
+            Factory.RegisterCallback<GraphicsRepresentation>((settings) => new GraphicsRepresentation(settings));
         }
-        public void Load(string filename)
+
+        public void LoadMap(string filename)
         {
             throw new NotImplementedException();
         }
-        public void AddEntity<T>(string id) where T : Entity, new()
+
+        public void AddEntity<T>(string id) where T : Entity
         {
             entities.Add(id, Factory.Produce<T>());
         }
         public void AddManager<T>(string id) where T : Manager, new()
         {
-            managers.Add(id, Factory.Produce<T>());
+            managers.Add(id, new T());
         }
 
         public T GetEntity<T>(string id) where T : Entity
@@ -39,10 +46,11 @@ namespace RadKatanaBrothers
             return (managers[id] as T);
         }
 
-        public void RunManagers()
+        public void RunAllManagers()
         {
             foreach (var manager in managers.Values)
                 manager.Run();
+                
         }
     }
 }

@@ -20,7 +20,6 @@ namespace RKBTest
         public void WorldConstructorTest()
         {
             World target = new World();
-            Assert.IsTrue(target.GetManager<RenderManager>(id: "RenderManager") != null);
         }
 
         /// <summary>
@@ -60,7 +59,7 @@ namespace RKBTest
         [TestMethod()]
         public void AddAndGetManagerTest()
         {
-            //AddAndGetManagerTestHelper<RenderManager>(Factory.Produce<RenderManager>("test"), "test");
+            AddAndGetManagerTestHelper<RenderManager>(Factory.Produce<RenderManager>(), "test");
         }
 
         ///<summary>
@@ -71,7 +70,7 @@ namespace RKBTest
             World target = new World();
             target.AddManager<RenderManager>(id: "test");
             RenderManager test = target.GetManager<RenderManager>(id: "test");
-            target.RunManagers();
+            //target.RunManagers();
         }
 
         [TestMethod()]
@@ -88,7 +87,7 @@ namespace RKBTest
         {
             World target = new World(); // TODO: Initialize to an appropriate value
             string filename = string.Empty; // TODO: Initialize to an appropriate value
-            target.Load(filename);
+            target.LoadMap(filename);
             Assert.Inconclusive("A method that does not return a value cannot be verified.");
         }
     }
