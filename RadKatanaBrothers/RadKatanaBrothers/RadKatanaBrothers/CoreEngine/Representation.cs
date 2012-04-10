@@ -7,5 +7,10 @@ namespace RadKatanaBrothers
 {
     public class Representation
     {
+        public Entity Parent
+        {
+            get;
+            set;
+        }
     }
 }

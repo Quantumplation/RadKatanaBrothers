@@ -113,6 +113,8 @@
     <Compile Include="CoreEngine\Factory.cs" />
     <Compile Include="CoreEngine\GameParams.cs" />
     <Compile Include="Graphics\GraphicsRepresentation.cs" />
+    <Compile Include="CoreEngine\PhysicsManager.cs" />
+    <Compile Include="CoreEngine\PhysicsRepresentation.cs" />
     <Compile Include="CoreEngine\Representation.cs" />
     <Compile Include="CoreEngine\World.cs" />
     <Compile Include="Gameplay\Player.cs" />

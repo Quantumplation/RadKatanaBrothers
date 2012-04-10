@@ -58,11 +58,17 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CircleGeometryPropertyTest.cs" />
     <Compile Include="CoreTest.cs" />
     <Compile Include="EntityTest.cs" />
     <Compile Include="FactoryTest.cs" />
     <Compile Include="GameParamsTest.cs" />
+    <Compile Include="PhysicsManagerTest.cs" />
+    <Compile Include="PhysicsRepresentationTest.cs" />
+    <Compile Include="PolygonGeometryPropertyTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SweptCircleGeometryPropertyTest.cs" />
+    <Compile Include="SweptPolygonGeometryPropertyTest.cs" />
     <Compile Include="WorldTest.cs" />
   </ItemGroup>
   <ItemGroup>

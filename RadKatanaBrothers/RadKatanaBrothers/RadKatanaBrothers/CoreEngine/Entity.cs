@@ -36,5 +36,11 @@ namespace RadKatanaBrothers
                 properties.Add(id, new Property<T>(value));
             return (properties[id] as Property<T>);
         }
+        public T AddIProperty<T>(string id, T value) where T : IProperty
+        {
+            if (!properties.ContainsKey(id))
+                properties.Add(id, value);
+            return (T)properties[id];
+        }
     }
 }
