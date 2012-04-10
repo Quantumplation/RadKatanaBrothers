@@ -1,6 +1,7 @@
 ﻿using RadKatanaBrothers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using Microsoft.Xna.Framework;
 
 namespace RKBTest
 {
@@ -29,7 +30,7 @@ namespace RKBTest
             {
                 added = true;
             }
-            public override void Run()
+            public override void Run(GameTime gameTime)
             {
                 
             }

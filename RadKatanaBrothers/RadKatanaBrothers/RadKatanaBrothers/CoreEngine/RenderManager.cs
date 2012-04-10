@@ -4,12 +4,14 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
 
 namespace RadKatanaBrothers
 {
     public class RenderManager : Manager
     {
         SpriteBatch spriteBatch;
+        BasicEffect basicEffect;
         List<GraphicsRepresentation> representations;
 
         public RenderManager()
@@ -22,20 +24,32 @@ namespace RadKatanaBrothers
             representations.Add(rep as GraphicsRepresentation);
         }
 
-        public void LoadContent(ContentManager Content, SpriteBatch spriteBatch)
+        public void LoadContent(ContentManager Content, GraphicsDevice GraphicsDevice)
         {
-            this.spriteBatch = spriteBatch;
+            basicEffect = new BasicEffect(GraphicsDevice);
+            basicEffect.VertexColorEnabled = true;
+            basicEffect.Projection = Matrix.CreateOrthographicOffCenter(
+                0.0f,
+                GraphicsDevice.Viewport.Width,
+                GraphicsDevice.Viewport.Height,
+                0,
+                0,
+                1);
+            spriteBatch = new SpriteBatch(GraphicsDevice);
+
             foreach (var representation in representations)
                 representation.LoadContent(Content);
         }
 
-        public override void Run()
+        public override void Run(GameTime gameTime)
         {
             try
             {
+                foreach (var representation in representations)
+                    representation.Update(gameTime);
                 spriteBatch.Begin();
                 foreach (var representation in representations)
-                    representation.Draw(spriteBatch);
+                    representation.Draw(spriteBatch, basicEffect);
                 spriteBatch.End();
             }
             catch (NullReferenceException e)

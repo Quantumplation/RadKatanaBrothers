@@ -15,22 +15,26 @@ namespace RKBTest
         public void APITest()
         {
             World world = new World();
-            //world.Load(filename: "celebrian");
+            world.LoadMap(filename: "test");
 
-            Factory.RegisterManager<RenderManager>(new RenderManager(), typeof(GraphicsRepresentation));
+            Factory.RegisterManager<RenderManager>(new RenderManager(), typeof(SpriteRepresentation));
             Factory.RegisterCallback<Entity>((settings) => new Entity());
             Factory.RegisterCallback<Player>((settings) => new Player());
-            Factory.RegisterCallback<GraphicsRepresentation>((settings) => new GraphicsRepresentation(settings));
+            Factory.RegisterCallback<SpriteRepresentation>((settings) => new SpriteRepresentation(settings));
 
             world.AddEntity<Player>(id: "Player");
             world.AddManager<RenderManager>(id: "RenderManager");
 
             Entity player = world.GetEntity<Player>(id: "Player");
             RenderManager render = world.GetManager<RenderManager>(id: "RenderManager");
-            player.AddRepresentation<GraphicsRepresentation>(id: "Graphics", settings: new GameParams
+            player.AddRepresentation<SpriteRepresentation>(id: "Graphics", settings: new GameParams
             {
-                {"spriteName", "Sprites/test"},
-                {"location", player.AddProperty<Vector2>("location", new Vector2(320, 240))}
+                {"spriteName", "Sprites/PARTYHARD"},
+                {"location", player.AddProperty<Vector2>("location", new Vector2(320, 240))},
+                {"numOfImages", 2},
+                {"numOfColumns", 2},
+                {"numOfRows", 1},
+                {"imagesPerSecond", 2.0f}
             });
             Property<int> health = player.AddProperty<int>(id: "Health", value: 100);
         }

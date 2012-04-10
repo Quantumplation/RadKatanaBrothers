@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
+using System.Xml;
 
 namespace RadKatanaBrothers
 {
@@ -16,15 +18,46 @@ namespace RadKatanaBrothers
             managers = new Dictionary<string, Manager>();
             RenderManager render = new RenderManager();
             AddManager<RenderManager>(id: "graphics");
-            Factory.RegisterManager<RenderManager>(GetManager<RenderManager>(id: "graphics"), typeof(GraphicsRepresentation));
+            Factory.RegisterManager<RenderManager>(GetManager<RenderManager>(id: "graphics"), typeof(SpriteRepresentation));
+            Factory.RegisterManager<RenderManager>(GetManager<RenderManager>(id: "graphics"), typeof(MeshRepresentation));
             Factory.RegisterCallback<Entity>((settings) => new Entity());
             Factory.RegisterCallback<Player>((settings) => new Player());
-            Factory.RegisterCallback<GraphicsRepresentation>((settings) => new GraphicsRepresentation(settings));
+            Factory.RegisterCallback<SpriteRepresentation>((settings) => new SpriteRepresentation(settings));
+            Factory.RegisterCallback<MeshRepresentation>((settings) => new MeshRepresentation(settings));
         }
 
         public void LoadMap(string filename)
         {
-            throw new NotImplementedException();
+            XmlDocument doc = new XmlDocument();
+            try
+            {
+                doc.Load(filename + ".xml");
+                XmlNodeList loadEntities = doc.GetElementsByTagName("Entity");
+                foreach (XmlNode entity in loadEntities)
+                {
+                    Entity newEntity = Factory.Produce(entity.Attributes["class"].Value) as Entity;
+                    XmlNode node = entity.FirstChild;
+                    do
+                    {
+                        if (node.Name == "Representation")
+                        {
+                            // TODO: Pi
+                            GameParams Settings = new GameParams();
+                            foreach (XmlNode child in node.ChildNodes)
+                                Settings.Add(child.Name, Factory.Produce(child.Attributes["type"].Value, child.Attributes["value"].Value));
+                            newEntity.AddRepresentation(node.Attributes["type"].Value, node.Attributes["name"].Value, Settings);
+                        }
+                        node = node.NextSibling;
+                    }
+                    while (node != entity.LastChild);
+                    //for (XmlNode node = entity.FirstChild; node != entity.LastChild; node = node.NextSibling)
+                        //Add the representations
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
 
         public void AddEntity<T>(string id) where T : Entity
@@ -46,10 +79,10 @@ namespace RadKatanaBrothers
             return (managers[id] as T);
         }
 
-        public void RunAllManagers()
+        public void RunAllManagers(GameTime gameTime)
         {
             foreach (var manager in managers.Values)
-                manager.Run();
+                manager.Run(gameTime);
                 
         }
     }

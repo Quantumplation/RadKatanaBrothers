@@ -20,6 +20,11 @@ namespace RadKatanaBrothers
         {
             representations.Add(id, Factory.Produce<T>(settings));
         }
+        public void AddRepresentation(string type, string id, GameParams settings)
+        {
+            representations.Add(id, Factory.Produce(type, settings) as Representation);
+        }
+
         public T GetRepresentation<T>(string id) where T : Representation
         {
             return (representations[id] as T);

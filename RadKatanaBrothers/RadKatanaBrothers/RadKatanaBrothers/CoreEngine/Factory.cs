@@ -27,6 +27,40 @@ namespace RadKatanaBrothers
             }
             return produced;
         }
+
+        public static Object Produce(string type, object param)
+        {
+            return null;
+        }
+
+        //Pi fix this
+        public static Object Produce(string type, GameParams settings = null)
+        {
+            switch (type)
+            {
+                #region Entities
+                case "Entity":
+                    return Produce<Entity>(settings);
+                case "Player":
+                    return Produce<Player>(settings);
+                #endregion
+
+                #region Representations
+                case "Representation":
+                    return Produce<Representation>(settings);
+                case "GraphicsRepresentation":
+                    return Produce<GraphicsRepresentation>(settings);
+                case "SpriteRepresentation":
+                    return Produce<SpriteRepresentation>(settings);
+                case "MeshRepresentation":
+                    return Produce<MeshRepresentation>(settings);
+                #endregion
+
+                default:
+                    throw new NotImplementedException("Factory.Produce does not recognize " + type);
+            }
+        }
+
         public static void RegisterManager<T>(T renderManager, params Type[] types) where T : Manager
         {
             foreach(Type t in types)

@@ -1,6 +1,10 @@
 ﻿using RadKatanaBrothers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Content;
+using System.Collections.Generic;
 
 namespace RKBTest
 {
@@ -42,21 +46,25 @@ namespace RKBTest
         /// <summary>
         ///A test for AddRepresentation and GetRepresentation
         ///</summary>
-        public void AddAndGetRepresentationTestHelper<T>(T representation, string id)
-            where T : Representation
+        [TestMethod()]
+        public void GraphicsRepresentationTest()
         {
             Entity target = new Entity();
-            T expected = representation;
-            T actual;
-            //target.AddRepresentation<T>(id);
-            //actual = target.GetRepresentation<T>(id);
-            //Assert.AreEqual(expected, actual);
-        }
-
-        [TestMethod()]
-        public void AddAndGetRepresentationTest()
-        {
-//            AddAndGetRepresentationTestHelper<GraphicsRepresentation>(Factory.Produce<GraphicsRepresentation>("test"), "test");
+            target.AddRepresentation<SpriteRepresentation>(id: "Graphics", settings: new GameParams
+            {
+                {"spriteName", "Sprites/test"},
+                {"location", target.AddProperty<Vector2>("location", Vector2.Zero)},
+                {"numOfImages", 2},
+                {"numOfColumns", 2},
+                {"numOfRows", 1},
+                {"animations", new Dictionary<string, Animation>
+                {
+                    {"default", new Animation(start: 0, end: 1, imagesPerSecond: 1.0f)}
+                }},
+                {"currentAnimation", "default"},
+            });
+            target.AddRepresentation<SpriteRepresentation>(id: "Default", settings: new GameParams());
+            SpriteRepresentation gr = target.GetRepresentation<SpriteRepresentation>(id: "Graphics");
         }
     }
 }

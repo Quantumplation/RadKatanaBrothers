@@ -36,12 +36,43 @@ namespace RadKatanaBrothers
         {
             // TODO: Add your initialization logic here
             world = new World();
+            world.LoadMap("test");
             world.AddEntity<Player>(id: "Player");
+            world.AddEntity<Entity>(id: "Shape");
             Entity player = world.GetEntity<Player>(id: "Player");
-            player.AddRepresentation<GraphicsRepresentation>(id: "Graphics", settings: new GameParams
+            player.AddRepresentation<SpriteRepresentation>(id: "Graphics", settings: new GameParams
             {
-                {"spriteName", "Sprites/test"},
-                {"location", player.AddProperty<Vector2>("location", new Vector2(320, 240))}
+                {"spriteName", "Sprites/PARTYHARD"},
+                {"location", player.AddProperty<Vector2>("location", Vector2.Zero)},
+                {"numOfImages", 2},
+                {"numOfColumns", 2},
+                {"numOfRows", 1},
+                {"animations", new Dictionary<string, Animation>
+                {
+                    {"default", new Animation(start: 0, end: 1, imagesPerSecond: 2.0f)}
+                }},
+            });
+            Entity shape = world.GetEntity<Entity>(id: "Shape");
+            shape.AddRepresentation<MeshRepresentation>(id: "Power", settings: new GameParams
+            {
+                {"color", Color.DarkGoldenrod},
+                {"first", new Vector3(636, 272, 0)},
+                {"second", new Vector3(652, 304, 0)},
+                {"third", new Vector3(620, 304, 0)}
+            });
+            shape.AddRepresentation<MeshRepresentation>(id: "Wisdom", settings: new GameParams
+            {
+                {"color", Color.DarkGoldenrod},
+                {"first", new Vector3(620, 304, 0)},
+                {"second", new Vector3(636, 336, 0)},
+                {"third", new Vector3(604, 336, 0)}
+            });
+            shape.AddRepresentation<MeshRepresentation>(id: "Courage", settings: new GameParams
+            {
+                {"color", Color.Yellow},
+                {"first", new Vector3(652, 304, 0)},
+                {"second", new Vector3(668, 336, 0)},
+                {"third", new Vector3(636, 336, 0)}
             });
             base.Initialize();
         }
@@ -53,8 +84,7 @@ namespace RadKatanaBrothers
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-            world.GetManager<RenderManager>(id: "graphics").LoadContent(Content, spriteBatch);
+            world.GetManager<RenderManager>(id: "graphics").LoadContent(Content, GraphicsDevice);
             // TODO: use this.Content to load your game content here
         }
 
@@ -75,7 +105,8 @@ namespace RadKatanaBrothers
         protected override void Update(GameTime gameTime)
         {
             // Allows the game to exit
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed
+                || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 this.Exit();
 
             // TODO: Add your update logic here
@@ -91,7 +122,7 @@ namespace RadKatanaBrothers
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-            world.RunAllManagers();
+            world.RunAllManagers(gameTime);
             base.Draw(gameTime);
         }
     }

@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Level>
+  <Entity class="Player">
+    <Representation type="GraphicsRepresentation" name="Graphics">
+    </Representation>
+  </Entity>
+</Level> 
