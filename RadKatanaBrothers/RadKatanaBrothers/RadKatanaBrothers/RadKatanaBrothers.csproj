@@ -112,6 +112,8 @@
     <Compile Include="CoreEngine\EventContainer.cs" />
     <Compile Include="CoreEngine\Factory.cs" />
     <Compile Include="CoreEngine\GameParams.cs" />
+    <Compile Include="Gameplay\GameplayManager.cs" />
+    <Compile Include="Gameplay\GameplayRepresentation.cs" />
     <Compile Include="Graphics\GraphicsRepresentation.cs" />
     <Compile Include="CoreEngine\PhysicsManager.cs" />
     <Compile Include="CoreEngine\PhysicsRepresentation.cs" />

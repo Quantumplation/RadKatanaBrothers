@@ -17,12 +17,12 @@ namespace RadKatanaBrothers
     public class Game1 : Microsoft.Xna.Framework.Game
     {
         GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
         World world;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
+            IsMouseVisible = true;
             Content.RootDirectory = "Content";
         }
 
@@ -54,7 +54,8 @@ namespace RadKatanaBrothers
                     {"default", new Animation(start: 0, end: 0, imagesPerSecond: 2.0f)}
                 }},
             });
-            player.AddRepresentation<PhysicsRepresentation>(id: "Physics", settings:null);
+            player.AddRepresentation<PhysicsRepresentation>(id: "Physics", settings: null);
+            player.AddRepresentation<GameplayRepresentation>(id: "Gameplay", settings: null);
             player.GetRepresentation<PhysicsRepresentation>(id: "Physics").ApplyForce(Vector2.UnitY * -3000);
             player.Initialize();
 

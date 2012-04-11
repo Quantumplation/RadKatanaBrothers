@@ -19,14 +19,17 @@ namespace RadKatanaBrothers
             RenderManager render = new RenderManager();
             AddManager<RenderManager>(id: "graphics");
             AddManager<PhysicsManager>(id: "physics");
+            AddManager<GameplayManager>(id: "gameplay");
             Factory.RegisterManager<RenderManager>(GetManager<RenderManager>(id: "graphics"), typeof(SpriteRepresentation));
             Factory.RegisterManager<RenderManager>(GetManager<RenderManager>(id: "graphics"), typeof(MeshRepresentation));
             Factory.RegisterManager<PhysicsManager>(GetManager<PhysicsManager>(id: "physics"), typeof(PhysicsRepresentation));
+            Factory.RegisterManager<GameplayManager>(GetManager<GameplayManager>(id: "gameplay"), typeof(GameplayRepresentation));
             Factory.RegisterCallback<Entity>((settings) => new Entity());
             Factory.RegisterCallback<Player>((settings) => new Player());
             Factory.RegisterCallback<SpriteRepresentation>((settings) => new SpriteRepresentation(settings));
             Factory.RegisterCallback<MeshRepresentation>((settings) => new MeshRepresentation(settings));
             Factory.RegisterCallback<PhysicsRepresentation>((settings) => new PhysicsRepresentation());
+            Factory.RegisterCallback<GameplayRepresentation>((settings) => new GameplayRepresentation());
         }
 
         public void LoadMap(string filename)
