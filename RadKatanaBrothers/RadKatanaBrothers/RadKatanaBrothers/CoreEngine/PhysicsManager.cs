@@ -20,28 +20,30 @@ namespace RadKatanaBrothers
             caPhysicalObjects.Add(rep as PhysicsRepresentation);
         }
 
-        public override void Run()
+        public override void Run(float elapsedMilliseconds)
         {
             List<Tuple<PhysicsRepresentation, PhysicsRepresentation>> resolvedPairs = new List<Tuple<PhysicsRepresentation, PhysicsRepresentation>>();
             foreach (var objA in caPhysicalObjects)
             {
                 foreach (var objB in caPhysicalObjects)
                 {
-                    Vector2 collision = CheckCollision(objA.Geometry, objB.Geometry);
                     var tuple = Tuple.Create(objB, objA);
-                    if (collision != Vector2.Zero && !resolvedPairs.Contains(tuple))
+                    if (CheckCollision(objA.Geometry, objB.Geometry) && objA != objB && !resolvedPairs.Contains(tuple))
                     {
                         // Collision response here: Need to implement the EPA algorithm
                         // For now just apply a force directly away on both objects.
-                        objA.ApplyForce((objA.Position - objB.Position) / 2);
-                        objB.ApplyForce((objB.Position - objA.Position) / 2);
+                        objA.ApplyForce((objA.Position - objB.Position));
+                        objB.ApplyForce((objB.Position - objA.Position));
                         resolvedPairs.Add(Tuple.Create(objA, objB));
                     }
                 }
             }
+
+            foreach (var obj in caPhysicalObjects)
+                obj.Update(elapsedMilliseconds);
         }
 
-        public static Vector2 CheckCollision(GeometryProperty objA, GeometryProperty objB)
+        public static bool CheckCollision(GeometryProperty objA, GeometryProperty objB)
         {
             Vector2 currentPoint = Support(objA, objB, objB.Position - objA.Position);
             List<Vector2> points = new List<Vector2>(){ currentPoint };
@@ -51,10 +53,10 @@ namespace RadKatanaBrothers
             {
                 Vector2 A = Support(objA, objB, direction);
                 if (Vector2.Dot(A, direction) < 0)
-                    return Vector2.Zero;
+                    return false;
                 points.Add(A);
             } while(!DoSimplex(points, ref direction));
-            return points.Aggregate(Vector2.Zero, (s, p) => { if (p.LengthSquared() > s.LengthSquared()) return p; else return s; });
+            return true;
         }
 
         public static Vector2 Support(GeometryProperty objA, GeometryProperty objB, Vector2 direction)

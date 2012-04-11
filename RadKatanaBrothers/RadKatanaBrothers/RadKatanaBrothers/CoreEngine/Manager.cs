@@ -9,6 +9,6 @@ namespace RadKatanaBrothers
     public abstract class Manager
     {
         public abstract void AddRepresentation(Representation rep);
-        public abstract void Run(GameTime gameTime);
+        public abstract void Run(float elapsedMilliseconds);
     }
 }

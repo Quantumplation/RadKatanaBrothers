@@ -41,9 +41,13 @@ namespace RadKatanaBrothers
             get { return coForces; }
         }
 
-        public void Initialize()
+        public PhysicsRepresentation()
         {
             coForces = new Dictionary<Vector2, Vector2>();
+        }
+
+        public override void Initialize()
+        {
             coGeometry = Parent.AddIProperty<GeometryProperty>("geometry", new CircleGeometryProperty() { Radius = 1 });
             
             coPosition = Parent.AddProperty<Vector2>("position", Vector2.Zero);
@@ -55,10 +59,12 @@ namespace RadKatanaBrothers
 
             coAcceleration = Parent.AddProperty<Vector2>("acceleration", Vector2.Zero);
             coAngularAcceleration = Parent.AddProperty<double>("angularAcceleration", 0.0f);
+
+            coGeometry.Position = coPosition.Value;
         }
 
-        public void ApplyForce(Vector2 force) { ApplyForce(force, Vector2.Zero); }
-        public void ApplyForce(Vector2 force, Vector2 origin)
+        public virtual void ApplyForce(Vector2 force) { ApplyForce(force, Vector2.Zero); }
+        public virtual void ApplyForce(Vector2 force, Vector2 origin)
         {
             if (!coForces.ContainsKey(origin))
                 coForces[origin] = Vector2.Zero;
@@ -74,6 +80,7 @@ namespace RadKatanaBrothers
                 coAcceleration.Value += force.Value / (float)coMass.Value;
                 coAngularAcceleration.Value += (force.Key.X * force.Value.Y - force.Value.X * force.Key.Y) / coMass.Value;
             }
+            coForces.Clear();
 
             coVelocity.Value += coAcceleration.Value * elapsedSeconds;
             coPosition.Value += coVelocity.Value * elapsedSeconds;

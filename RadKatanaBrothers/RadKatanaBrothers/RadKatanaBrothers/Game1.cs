@@ -37,43 +37,55 @@ namespace RadKatanaBrothers
             // TODO: Add your initialization logic here
             world = new World();
             world.LoadMap("test");
-            world.AddEntity<Player>(id: "Player");
             world.AddEntity<Entity>(id: "Shape");
+            world.AddEntity<Player>(id: "Player");
             Entity player = world.GetEntity<Player>(id: "Player");
+            player.AddIProperty<GeometryProperty>(id: "geometry", value: new CircleGeometryProperty() { Radius = 50 });
+            player.AddProperty<Vector2>("position", new Vector2(300, 250));
             player.AddRepresentation<SpriteRepresentation>(id: "Graphics", settings: new GameParams
             {
-                {"spriteName", "Sprites/PARTYHARD"},
-                {"location", player.AddProperty<Vector2>("location", Vector2.Zero)},
-                {"numOfImages", 2},
-                {"numOfColumns", 2},
+                {"spriteName", "Sprites/Circle"},
+                {"numOfImages", 1},
+                {"numOfColumns", 1},
                 {"numOfRows", 1},
+                {"origin", Vector2.One * 50},
                 {"animations", new Dictionary<string, Animation>
                 {
-                    {"default", new Animation(start: 0, end: 1, imagesPerSecond: 2.0f)}
+                    {"default", new Animation(start: 0, end: 0, imagesPerSecond: 2.0f)}
                 }},
             });
+            player.AddRepresentation<PhysicsRepresentation>(id: "Physics", settings:null);
+            player.GetRepresentation<PhysicsRepresentation>(id: "Physics").ApplyForce(Vector2.UnitY * -3000);
+            player.Initialize();
+
             Entity shape = world.GetEntity<Entity>(id: "Shape");
+            GeometryProperty geo = new PolygonGeometryProperty(new List<Vector2>{ new Vector2(0, -16), new Vector2(16, 16), new Vector2(-16, 16) });
+            shape.AddIProperty<GeometryProperty>("geometry", geo);
+            shape.AddProperty<Vector2>("position", new Vector2(250, 100));
+            shape.AddRepresentation<PhysicsRepresentation>("physics", null);
             shape.AddRepresentation<MeshRepresentation>(id: "Power", settings: new GameParams
             {
                 {"color", Color.DarkGoldenrod},
-                {"first", new Vector3(636, 272, 0)},
-                {"second", new Vector3(652, 304, 0)},
-                {"third", new Vector3(620, 304, 0)}
+                {"first", new Vector3(0, -16, 0)},
+                {"second", new Vector3(16, 16, 0)},
+                {"third", new Vector3(-16, 16, 0)}
             });
-            shape.AddRepresentation<MeshRepresentation>(id: "Wisdom", settings: new GameParams
-            {
-                {"color", Color.DarkGoldenrod},
-                {"first", new Vector3(620, 304, 0)},
-                {"second", new Vector3(636, 336, 0)},
-                {"third", new Vector3(604, 336, 0)}
-            });
-            shape.AddRepresentation<MeshRepresentation>(id: "Courage", settings: new GameParams
-            {
-                {"color", Color.Yellow},
-                {"first", new Vector3(652, 304, 0)},
-                {"second", new Vector3(668, 336, 0)},
-                {"third", new Vector3(636, 336, 0)}
-            });
+            //shape.AddRepresentation<MeshRepresentation>(id: "Wisdom", settings: new GameParams
+            //{
+            //    {"color", Color.DarkGoldenrod},
+            //    {"first", new Vector3(-16, 0, 0)},
+            //    {"second", new Vector3(0, 32, 0)},
+            //    {"third", new Vector3(-32, 32, 0)}
+            //});
+            //shape.AddRepresentation<MeshRepresentation>(id: "Courage", settings: new GameParams
+            //{
+            //    {"color", Color.Yellow},
+            //    {"first", new Vector3(16, 0, 0)},
+            //    {"second", new Vector3(32, 32, 0)},
+            //    {"third", new Vector3(0, 32, 0)}
+            //});
+
+            shape.Initialize();
             base.Initialize();
         }
 
@@ -122,7 +134,7 @@ namespace RadKatanaBrothers
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-            world.RunAllManagers(gameTime);
+            world.RunAllManagers((float)gameTime.ElapsedGameTime.TotalMilliseconds);
             base.Draw(gameTime);
         }
     }

@@ -27,7 +27,7 @@ namespace RKBTest
                 GeometryProperty objB = new CircleGeometryProperty() { Position = Vector2.UnitX * x, Radius = 5.0f }; // TODO: Initialize to an appropriate value
                 bool expected = x < 15;
                 bool actual;
-                actual = PhysicsManager.CheckCollision(objA, objB) != Vector2.Zero;
+                actual = PhysicsManager.CheckCollision(objA, objB);
                 Assert.AreEqual(expected, actual);
             }
         }
@@ -44,7 +44,7 @@ namespace RKBTest
                     GeometryProperty objB = new SweptCircleGeometryProperty() { Position = position, Radius = 5.0f }; // TODO: Initialize to an appropriate value
                     bool expected = position.Length() < 15;
                     bool actual;
-                    actual = PhysicsManager.CheckCollision(objA, objB) != Vector2.Zero;
+                    actual = PhysicsManager.CheckCollision(objA, objB);
                     Assert.AreEqual(expected, actual);
                 }
             }
@@ -65,7 +65,7 @@ namespace RKBTest
                                                                     new Vector2(7, 1)  ,new Vector2(4, 5),
                                                                     new Vector2(-6, 0) ,new Vector2(-1, -6) }) { Position = new Vector2(x, 0) };
                 bool expected = x <= 12;
-                bool actual = PhysicsManager.CheckCollision(objA, objB) != Vector2.Zero;
+                bool actual = PhysicsManager.CheckCollision(objA, objB);
                 Assert.AreEqual(expected, actual);
             }
         }
@@ -79,20 +79,34 @@ namespace RKBTest
             PhysicsManager target = new PhysicsManager(); // TODO: Initialize to an appropriate value
             Entity entA = new Entity();
             entA.AddProperty<Vector2>("position", Vector2.Zero);
-            PhysicsRepresentation objA = new PhysicsRepresentation() { Parent = entA, Geometry = new CircleGeometryProperty() { Radius = 10 } };
+            entA.AddIProperty<GeometryProperty>("geometry", new CircleGeometryProperty() { Radius = 10 });
+            PhysicsRepHelper objA = new PhysicsRepHelper() { Parent = entA };
             objA.Initialize();
 
             Entity entB = new Entity();
             entB.AddProperty<Vector2>("position", Vector2.UnitX * 5);
-            PhysicsRepresentation objB = new PhysicsRepresentation() { Parent = entB, Geometry = new CircleGeometryProperty() { Radius = 10 } };
+            entB.AddIProperty<GeometryProperty>("geometry", new CircleGeometryProperty() { Radius = 10 });
+            PhysicsRepHelper objB = new PhysicsRepHelper() { Parent = entB };
             objB.Initialize();
 
             target.AddRepresentation(objA);
             target.AddRepresentation(objB);
-            target.Run();
+            target.Run(1000f);
 
-            Assert.AreEqual(objA.Forces[Vector2.Zero], Vector2.UnitX * -2.5f);
-            Assert.AreEqual(objB.Forces[Vector2.Zero], Vector2.UnitX * 2.5f);
+            Assert.AreEqual(objA.appliedForce, Vector2.UnitX * -5f);
+            Assert.AreEqual(objB.appliedForce, Vector2.UnitX * 5f);
+        }
+    }
+
+    public class PhysicsRepHelper : PhysicsRepresentation
+    {
+        public Vector2 appliedForce;
+        public Vector2 appliedOrigin;
+        public override void ApplyForce(Vector2 force, Vector2 origin)
+        {
+            appliedForce += force;
+            appliedOrigin += origin;
+            base.ApplyForce(force, origin);
         }
     }
 }

@@ -30,12 +30,12 @@ namespace RKBTest
             player.AddRepresentation<SpriteRepresentation>(id: "Graphics", settings: new GameParams
             {
                 {"spriteName", "Sprites/PARTYHARD"},
-                {"location", player.AddProperty<Vector2>("location", new Vector2(320, 240))},
                 {"numOfImages", 2},
                 {"numOfColumns", 2},
                 {"numOfRows", 1},
                 {"imagesPerSecond", 2.0f}
             });
+            
             Property<int> health = player.AddProperty<int>(id: "Health", value: 100);
         }
     }

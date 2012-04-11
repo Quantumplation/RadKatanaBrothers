@@ -7,6 +7,8 @@ namespace RadKatanaBrothers
 {
     public class Representation
     {
+        public virtual void Initialize() { }
+
         public Entity Parent
         {
             get;

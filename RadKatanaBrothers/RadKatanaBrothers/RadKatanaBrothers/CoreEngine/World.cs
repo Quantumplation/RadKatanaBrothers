@@ -18,12 +18,15 @@ namespace RadKatanaBrothers
             managers = new Dictionary<string, Manager>();
             RenderManager render = new RenderManager();
             AddManager<RenderManager>(id: "graphics");
+            AddManager<PhysicsManager>(id: "physics");
             Factory.RegisterManager<RenderManager>(GetManager<RenderManager>(id: "graphics"), typeof(SpriteRepresentation));
             Factory.RegisterManager<RenderManager>(GetManager<RenderManager>(id: "graphics"), typeof(MeshRepresentation));
+            Factory.RegisterManager<PhysicsManager>(GetManager<PhysicsManager>(id: "physics"), typeof(PhysicsRepresentation));
             Factory.RegisterCallback<Entity>((settings) => new Entity());
             Factory.RegisterCallback<Player>((settings) => new Player());
             Factory.RegisterCallback<SpriteRepresentation>((settings) => new SpriteRepresentation(settings));
             Factory.RegisterCallback<MeshRepresentation>((settings) => new MeshRepresentation(settings));
+            Factory.RegisterCallback<PhysicsRepresentation>((settings) => new PhysicsRepresentation());
         }
 
         public void LoadMap(string filename)
@@ -79,10 +82,10 @@ namespace RadKatanaBrothers
             return (managers[id] as T);
         }
 
-        public void RunAllManagers(GameTime gameTime)
+        public void RunAllManagers(float elapsedMilliseconds)
         {
             foreach (var manager in managers.Values)
-                manager.Run(gameTime);
+                manager.Run(elapsedMilliseconds);
                 
         }
     }

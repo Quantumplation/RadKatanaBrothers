@@ -41,21 +41,24 @@ namespace RadKatanaBrothers
                 representation.LoadContent(Content);
         }
 
-        public override void Run(GameTime gameTime)
+        public override void Run(float elapsedMilliseconds)
         {
             try
             {
                 foreach (var representation in representations)
-                    representation.Update(gameTime);
+                    representation.Update(elapsedMilliseconds);
                 spriteBatch.Begin();
                 foreach (var representation in representations)
                     representation.Draw(spriteBatch, basicEffect);
-                spriteBatch.End();
             }
             catch (NullReferenceException e)
             {
                 Console.Error.WriteLine(e.Message);
                 return;
+            }
+            finally
+            {
+                spriteBatch.End();
             }
         }
     }

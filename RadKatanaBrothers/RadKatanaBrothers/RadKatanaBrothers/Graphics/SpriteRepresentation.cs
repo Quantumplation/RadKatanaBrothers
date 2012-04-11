@@ -25,12 +25,15 @@ namespace RadKatanaBrothers
     public class SpriteRepresentation : GraphicsRepresentation
     {
         string spriteName;
-        Property<Vector2> location;
         Texture2D sprite;
         int numOfRows, numOfColumns;
         Rectangle[] images;
         int currentIndex;
         float timeElapsed;
+        Vector2 origin;
+
+        Property<Vector2> coLocation;
+        Property<double> coRotation;
 
         Dictionary<string, Animation> animations;
         Animation currAnimation;
@@ -56,14 +59,21 @@ namespace RadKatanaBrothers
         public SpriteRepresentation(GameParams Settings)
         {
             spriteName = (string)Settings["spriteName"] ?? "Sprites/test";
-            location = (Property<Vector2>)Settings["location"] ?? new Property<Vector2>(Vector2.Zero);
             images = new Rectangle[(int)(Settings["numOfImages"] ?? 2)];
             numOfColumns = (int)(Settings["numOfColumns"] ?? 2);
             numOfRows = (int)(Settings["numOfRows"] ?? 1);
             animations = (Dictionary<string, Animation>)Settings["animations"] ?? new Dictionary<string, Animation>();
+            if (Settings.Any( kvp => kvp.Key == "origin" ))
+                origin = (Vector2)Settings["origin"];
             if (!animations.ContainsKey("default"))
                 animations.Add("default", new Animation(0, images.Length - 1, 1.0f));
             CurrentAnimation = animations[(string)Settings["currentAnimation"] ?? "default"];
+        }
+
+        public override void Initialize()
+        {
+            coLocation = Parent.AddProperty<Vector2>("position", Vector2.Zero);
+            coRotation = Parent.AddProperty<double>("rotation", 0.0f);
         }
 
         public override void LoadContent(ContentManager Content)
@@ -79,9 +89,9 @@ namespace RadKatanaBrothers
                     imageHeight);
         }
 
-        public override void Update(GameTime gameTime)
+        public override void Update(float elapsedMilliseconds)
         {
-            timeElapsed += (float)gameTime.ElapsedGameTime.Milliseconds / 1000.0f;
+            timeElapsed += elapsedMilliseconds / 1000.0f;
             if (timeElapsed >= CurrentAnimation.AnimationSpeed)
             {
                 if (++currentIndex > CurrentAnimation.EndFrame)
@@ -92,7 +102,7 @@ namespace RadKatanaBrothers
 
         public override void Draw(SpriteBatch spriteBatch, BasicEffect basicEffect)
         {
-            spriteBatch.Draw(sprite, location.Value, images[currentIndex], Color.White);
+            spriteBatch.Draw(sprite, coLocation.Value, images[currentIndex], Color.White, (float)coRotation.Value, origin, 1.0f, SpriteEffects.None, 0.0f);
         }
     }
 }

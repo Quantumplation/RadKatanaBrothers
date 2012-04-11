@@ -11,7 +11,7 @@ namespace RadKatanaBrothers
     public abstract class GraphicsRepresentation : Representation
     {
         public abstract void LoadContent(ContentManager Content);
-        public abstract void Update(GameTime gameTime);
+        public abstract void Update(float elapsedMilliseconds);
         public abstract void Draw(SpriteBatch spriteBatch, BasicEffect basicEffect);
     }
 }

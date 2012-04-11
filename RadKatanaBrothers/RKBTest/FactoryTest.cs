@@ -30,7 +30,7 @@ namespace RKBTest
             {
                 added = true;
             }
-            public override void Run(GameTime gameTime)
+            public override void Run(float elapsedMilliseconds)
             {
                 
             }

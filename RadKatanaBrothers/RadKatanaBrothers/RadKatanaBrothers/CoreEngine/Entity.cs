@@ -16,6 +16,15 @@ namespace RadKatanaBrothers
             properties = new Dictionary<string, IProperty>();
         }
 
+        public void Initialize()
+        {
+            foreach (var rep in representations.Values)
+            {
+                rep.Parent = this;
+                rep.Initialize();
+            }
+        }
+
         public void AddRepresentation<T>(string id, GameParams settings) where T : Representation
         {
             representations.Add(id, Factory.Produce<T>(settings));
