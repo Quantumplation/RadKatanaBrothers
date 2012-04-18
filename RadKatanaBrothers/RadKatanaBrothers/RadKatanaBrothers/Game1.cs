@@ -19,6 +19,7 @@ namespace RadKatanaBrothers
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         World world;
+        Entity player;
 
         public Game1()
         {
@@ -36,10 +37,13 @@ namespace RadKatanaBrothers
         {
             // TODO: Add your initialization logic here
             world = new World();
+
+            world.GetManager<PhysicsManager>("physics").Collision += new Action(Game1_Collision);
+
             world.LoadMap("test");
             world.AddEntity<Entity>(id: "Shape");
             world.AddEntity<Player>(id: "Player");
-            Entity player = world.GetEntity<Player>(id: "Player");
+            player = world.GetEntity<Player>(id: "Player");
             player.AddIProperty<GeometryProperty>(id: "geometry", value: new CircleGeometryProperty() { Radius = 50 });
             player.AddProperty<Vector2>("position", new Vector2(300, 250));
             player.AddRepresentation<SpriteRepresentation>(id: "Graphics", settings: new GameParams
@@ -59,16 +63,24 @@ namespace RadKatanaBrothers
             player.Initialize();
 
             Entity shape = world.GetEntity<Entity>(id: "Shape");
-            GeometryProperty geo = new PolygonGeometryProperty(new List<Vector2>{ new Vector2(0, -16), new Vector2(16, 16), new Vector2(-16, 16) });
+            GeometryProperty geo = new PolygonGeometryProperty(new List<Vector2>{ new Vector2(0, -160), new Vector2(320, -160), new Vector2(160, 160), new Vector2(-160, 160) });
             shape.AddIProperty<GeometryProperty>("geometry", geo);
-            shape.AddProperty<Vector2>("position", new Vector2(250, 100));
+            shape.AddProperty<Vector2>("position", new Vector2(250, 220));
             shape.AddRepresentation<PhysicsRepresentation>("physics", null);
             shape.AddRepresentation<MeshRepresentation>(id: "Power", settings: new GameParams
             {
                 {"color", Color.DarkGoldenrod},
-                {"first", new Vector3(0, -16, 0)},
-                {"second", new Vector3(16, 16, 0)},
-                {"third", new Vector3(-16, 16, 0)}
+                {"first", new Vector3(0, -160, 0)},
+                {"second", new Vector3(160, 160, 0)},
+                {"third", new Vector3(-160, 160, 0)},
+                {"fourth", new Vector3(320, -160, 0)}
+            }); 
+            shape.AddRepresentation<MeshRepresentation>(id: "Power2", settings: new GameParams
+            {
+                {"color", Color.DarkGoldenrod},
+                {"first", new Vector3(0, -160, 0)},
+                {"fourth", new Vector3(320, -160, 0)},
+                {"second", new Vector3(160, 160, 0)}
             });
             //shape.AddRepresentation<MeshRepresentation>(id: "Wisdom", settings: new GameParams
             //{
@@ -87,6 +99,13 @@ namespace RadKatanaBrothers
 
             shape.Initialize();
             base.Initialize();
+        }
+
+        Color bgColor = Color.Blue;
+
+        void Game1_Collision()
+        {
+            bgColor = Color.Red;
         }
 
         /// <summary>
@@ -121,6 +140,11 @@ namespace RadKatanaBrothers
                 || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 this.Exit();
 
+
+            var state = Mouse.GetState();
+            Vector2 mousePos = new Vector2(state.X, state.Y);
+            player.AddProperty<Vector2>("position", Vector2.Zero).Value = mousePos;
+
             // TODO: Add your update logic here
             base.Update(gameTime);
         }
@@ -131,7 +155,8 @@ namespace RadKatanaBrothers
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(bgColor);
+            bgColor = Color.Blue;
 
             // TODO: Add your drawing code here
             world.RunAllManagers((float)gameTime.ElapsedGameTime.TotalMilliseconds);

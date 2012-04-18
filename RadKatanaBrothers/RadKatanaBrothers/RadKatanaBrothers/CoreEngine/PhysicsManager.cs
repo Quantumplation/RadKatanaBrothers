@@ -35,6 +35,7 @@ namespace RadKatanaBrothers
                         objA.ApplyForce((objA.Position - objB.Position));
                         objB.ApplyForce((objB.Position - objA.Position));
                         resolvedPairs.Add(Tuple.Create(objA, objB));
+                        Collision();
                     }
                 }
             }
@@ -42,6 +43,8 @@ namespace RadKatanaBrothers
             foreach (var obj in caPhysicalObjects)
                 obj.Update(elapsedMilliseconds);
         }
+
+        public event Action Collision;
 
         public static bool CheckCollision(GeometryProperty objA, GeometryProperty objB)
         {

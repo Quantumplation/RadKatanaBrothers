@@ -83,7 +83,7 @@ namespace RadKatanaBrothers
             coForces.Clear();
 
             coVelocity.Value += coAcceleration.Value * elapsedSeconds;
-            coPosition.Value += coVelocity.Value * elapsedSeconds;
+//            coPosition.Value += coVelocity.Value * elapsedSeconds;
 
             coAngularVelocity.Value += coAngularAcceleration.Value * elapsedSeconds;
             coRotation.Value += coAngularVelocity.Value * elapsedSeconds;
