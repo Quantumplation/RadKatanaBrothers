@@ -87,6 +87,11 @@ namespace RadKatanaBrothers
     public class PolygonGeometryProperty : GeometryProperty
     {
         List<Vector2> coConvex;
+        public List<Vector2> Points
+        {
+            get { return coConvex; }
+            set { }
+        }
 
         public PolygonGeometryProperty(IEnumerable<Vector2> points)
         {

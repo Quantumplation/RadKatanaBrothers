@@ -28,6 +28,7 @@ namespace RadKatanaBrothers
             Factory.RegisterCallback<Player>((settings) => new Player());
             Factory.RegisterCallback<SpriteRepresentation>((settings) => new SpriteRepresentation(settings));
             Factory.RegisterCallback<MeshRepresentation>((settings) => new MeshRepresentation(settings));
+            Factory.RegisterCallback<CircleRepresentation>((settings) => new CircleRepresentation(settings));
             Factory.RegisterCallback<PhysicsRepresentation>((settings) => new PhysicsRepresentation());
             Factory.RegisterCallback<GameplayRepresentation>((settings) => new GameplayRepresentation());
         }

@@ -60,16 +60,20 @@ namespace RadKatanaBrothers
             player.Initialize();
 
             Entity shape = world.GetEntity<Entity>(id: "Shape");
-            GeometryProperty geo = new PolygonGeometryProperty(new List<Vector2>{ new Vector2(0, -16), new Vector2(16, 16), new Vector2(-16, 16) });
+            GeometryProperty geo = new PolygonGeometryProperty(new List<Vector2>
+            {
+                new Vector2(0, -16),
+                new Vector2(48, 96),
+                new Vector2(7, 2),
+                new Vector2(-51, 6),
+                new Vector2(-13, -7)
+            });
             shape.AddIProperty<GeometryProperty>("geometry", geo);
             shape.AddProperty<Vector2>("position", new Vector2(250, 100));
             shape.AddRepresentation<PhysicsRepresentation>("physics", null);
             shape.AddRepresentation<MeshRepresentation>(id: "Power", settings: new GameParams
             {
-                {"color", Color.DarkGoldenrod},
-                {"first", new Vector3(0, -16, 0)},
-                {"second", new Vector3(16, 16, 0)},
-                {"third", new Vector3(-16, 16, 0)}
+                {"color", Color.DarkGoldenrod}
             });
             //shape.AddRepresentation<MeshRepresentation>(id: "Wisdom", settings: new GameParams
             //{
