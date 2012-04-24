@@ -17,11 +17,27 @@ namespace RadKatanaBrothers
         public RenderManager()
         {
             representations = new List<GraphicsRepresentation>();
+            CircleRepresentation.onCreated += this.AddRepresentation;
+            MeshRepresentation.onCreated += this.AddRepresentation;
+            SpriteRepresentation.onCreated += this.AddRepresentation;
+            CircleRepresentation.onTerminated += this.RemoveRepresentation;
+            MeshRepresentation.onTerminated += this.RemoveRepresentation;
+            SpriteRepresentation.onTerminated += this.RemoveRepresentation;
         }
 
         public override void AddRepresentation(Representation rep)
         {
             representations.Add(rep as GraphicsRepresentation);
+        }
+
+        public override void ClearRepresentations()
+        {
+            representations.Clear();
+        }
+
+        public override void RemoveRepresentation(Representation rep)
+        {
+            representations.Remove(rep as GraphicsRepresentation);
         }
 
         public void LoadContent(ContentManager Content, GraphicsDevice GraphicsDevice)

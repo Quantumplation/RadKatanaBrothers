@@ -14,19 +14,17 @@ namespace RKBTest
         [TestMethod]
         public void APITest()
         {
-            World world = new World();
-            world.LoadMap(filename: "test");
-
+            World.Initialize();
             Factory.RegisterManager<RenderManager>(new RenderManager(), typeof(SpriteRepresentation));
             Factory.RegisterCallback<Entity>((settings) => new Entity());
             Factory.RegisterCallback<Player>((settings) => new Player());
             Factory.RegisterCallback<SpriteRepresentation>((settings) => new SpriteRepresentation(settings));
 
-            world.AddEntity<Player>(id: "Player");
-            world.AddManager<RenderManager>(id: "RenderManager");
+            World.AddEntity<Player>(id: "Player");
+            World.AddManager<RenderManager>(id: "RenderManager");
 
-            Entity player = world.GetEntity<Player>(id: "Player");
-            RenderManager render = world.GetManager<RenderManager>(id: "RenderManager");
+            Entity player = World.GetEntity<Player>(id: "Player");
+            RenderManager render = World.GetManager<RenderManager>(id: "RenderManager");
             player.AddRepresentation<SpriteRepresentation>(id: "Graphics", settings: new GameParams
             {
                 {"spriteName", "Sprites/PARTYHARD"},

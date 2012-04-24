@@ -24,6 +24,19 @@ namespace RadKatanaBrothers
 
     public class SpriteRepresentation : GraphicsRepresentation
     {
+        public static event Created onCreated;
+        public static event Terminated onTerminated;
+        public override void Create()
+        {
+            if (onCreated != null)
+                onCreated(this);
+        }
+        public override void Terminate()
+        {
+            if (onTerminated != null)
+                onTerminated(this);
+        }
+
         string spriteName;
         Texture2D sprite;
         int numOfRows, numOfColumns;

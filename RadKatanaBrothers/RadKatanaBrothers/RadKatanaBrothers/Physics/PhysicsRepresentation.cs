@@ -8,6 +8,19 @@ namespace RadKatanaBrothers
 {
     public class PhysicsRepresentation : Representation
     {
+        public static event Created onCreated;
+        public static event Terminated onTerminated;
+        public override void Create()
+        {
+            if (onCreated != null)
+                onCreated(this);
+        }
+        public override void Terminate()
+        {
+            if (onTerminated != null)
+                onTerminated(this);
+        }
+
         GeometryProperty coGeometry;
         Property<double> coMass;
         Property<double> coRotation;

@@ -72,7 +72,7 @@ namespace RKBTest
         [TestMethod()]
         public void MeshRepresentationConstructorTest()
         {
-            World world = new World();
+            World.Initialize();
             List<Vector2> points = new List<Vector2>()
             {
                 new Vector2(0, 16),
@@ -94,7 +94,7 @@ namespace RKBTest
         [TestMethod()]
         public void InitializationTest()
         {
-            World world = new World();
+            World.Initialize();
             List<Vector2> points = new List<Vector2>()
             {
                 new Vector2(0, 16),

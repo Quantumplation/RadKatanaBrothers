@@ -10,9 +10,16 @@ namespace RadKatanaBrothers
     {
         List<PhysicsRepresentation> caPhysicalObjects;
 
+        public static Vector2 Gravity
+        {
+            get { return Vector2.UnitY * 50; }
+        }
+
         public PhysicsManager()
         {
             caPhysicalObjects = new List<PhysicsRepresentation>();
+            PhysicsRepresentation.onCreated += this.AddRepresentation;
+            PhysicsRepresentation.onTerminated += this.RemoveRepresentation;
         }
 
         public override void AddRepresentation(Representation rep)
@@ -20,11 +27,22 @@ namespace RadKatanaBrothers
             caPhysicalObjects.Add(rep as PhysicsRepresentation);
         }
 
+        public override void ClearRepresentations()
+        {
+            caPhysicalObjects.Clear();
+        }
+
+        public override void RemoveRepresentation(Representation rep)
+        {
+            caPhysicalObjects.Remove(rep as PhysicsRepresentation);
+        }
+
         public override void Run(float elapsedMilliseconds)
         {
             List<Tuple<PhysicsRepresentation, PhysicsRepresentation>> resolvedPairs = new List<Tuple<PhysicsRepresentation, PhysicsRepresentation>>();
             foreach (var objA in caPhysicalObjects)
             {
+                objA.ApplyForce(Gravity);
                 foreach (var objB in caPhysicalObjects)
                 {
                     var tuple = Tuple.Create(objB, objA);
@@ -32,6 +50,10 @@ namespace RadKatanaBrothers
                     {
                         // Collision response here: Need to implement the EPA algorithm
                         // For now just apply a force directly away on both objects.
+                        if (objA.Parent.Events.HasEvent("onCollision"))
+                            objA.Parent.Events.GetEvent<Action<Entity>>("onCollision")(objB.Parent);
+                        if (objB.Parent.Events.HasEvent("onCollision"))
+                            objB.Parent.Events.GetEvent<Action<Entity>>("onCollision")(objA.Parent);
                         objA.ApplyForce((objA.Position - objB.Position));
                         objB.ApplyForce((objB.Position - objA.Position));
                         resolvedPairs.Add(Tuple.Create(objA, objB));

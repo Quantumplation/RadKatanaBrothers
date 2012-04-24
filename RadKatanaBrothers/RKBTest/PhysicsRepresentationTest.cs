@@ -20,9 +20,10 @@ namespace RKBTest
         [TestMethod()]
         public void ApplyForceTest()
         {
+            World.Initialize();
             Entity e = new Entity();
             PhysicsRepresentation target = new PhysicsRepresentation() { Parent = e };
-            target.Initialize();
+            target.Create();
             Vector2 force = Vector2.UnitX;
             Vector2 origin = Vector2.Zero;
             int sum = 0;
@@ -40,10 +41,12 @@ namespace RKBTest
         [TestMethod()]
         public void UpdateLinearTest()
         {
-            Entity e = new Entity();
+            World.Initialize();
+            Entity e = Factory.Produce<Entity>() ;
             e.AddProperty<double>("mass", 5.0f );
-            PhysicsRepresentation target = new PhysicsRepresentation() { Parent = e };
-            target.Initialize();
+            e.AddRepresentation<PhysicsRepresentation>(id: "physics", settings: new GameParams());
+            e.Initialize();
+            PhysicsRepresentation target = e.GetRepresentation<PhysicsRepresentation>(id: "physics");
             target.ApplyForce(Vector2.UnitX * 15);
             float elapsedMilliseconds = 1000f; // TODO: Initialize to an appropriate value
             target.Update(elapsedMilliseconds);
@@ -53,10 +56,12 @@ namespace RKBTest
         [TestMethod()]
         public void UpdateAngularTest()
         {
-            Entity e = new Entity();
+            World.Initialize();
+            Entity e = Factory.Produce<Entity>();
             e.AddProperty<double>("mass", 5.0f);
-            PhysicsRepresentation target = new PhysicsRepresentation() { Parent = e };
-            target.Initialize();
+            e.AddRepresentation<PhysicsRepresentation>(id: "physics", settings: new GameParams());
+            e.Initialize();
+            PhysicsRepresentation target = e.GetRepresentation<PhysicsRepresentation>(id: "physics");
             target.ApplyForce(Vector2.UnitX * 15, Vector2.UnitY * 5);
             float elapsedMilliseconds = 1000f;
             target.Update(elapsedMilliseconds);

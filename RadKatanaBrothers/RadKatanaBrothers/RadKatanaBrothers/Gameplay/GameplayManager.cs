@@ -12,11 +12,23 @@ namespace RadKatanaBrothers
         public GameplayManager()
         {
             representations = new List<GameplayRepresentation>();
+            GameplayRepresentation.onCreated += this.RemoveRepresentation;
+            GameplayRepresentation.onTerminated += this.RemoveRepresentation;
         }
 
         public override void AddRepresentation(Representation rep)
         {
             representations.Add(rep as GameplayRepresentation);
+        }
+
+        public override void ClearRepresentations()
+        {
+            representations.Clear();
+        }
+
+        public override void RemoveRepresentation(Representation rep)
+        {
+            representations.Remove(rep as GameplayRepresentation);
         }
 
         public override void Run(float elapsedMilliseconds)

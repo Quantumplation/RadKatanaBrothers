@@ -17,11 +17,15 @@ namespace RadKatanaBrothers
     public class Game1 : Microsoft.Xna.Framework.Game
     {
         GraphicsDeviceManager graphics;
-        World world;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
+            Window.AllowUserResizing = false;
+            Window.Title = "Rad Katana Bros. and the Insane Jetpack of Magic";
+            graphics.PreferredBackBufferWidth = 720;
+            graphics.PreferredBackBufferHeight = 720;
+            graphics.ApplyChanges();
             IsMouseVisible = true;
             Content.RootDirectory = "Content";
         }
@@ -35,62 +39,62 @@ namespace RadKatanaBrothers
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            world = new World();
-            world.LoadMap("test");
-            world.AddEntity<Entity>(id: "Shape");
-            world.AddEntity<Player>(id: "Player");
-            Entity player = world.GetEntity<Player>(id: "Player");
-            player.AddIProperty<GeometryProperty>(id: "geometry", value: new CircleGeometryProperty() { Radius = 50 });
-            player.AddProperty<Vector2>("position", new Vector2(300, 250));
-            player.AddRepresentation<SpriteRepresentation>(id: "Graphics", settings: new GameParams
-            {
-                {"spriteName", "Sprites/Circle"},
-                {"numOfImages", 1},
-                {"numOfColumns", 1},
-                {"numOfRows", 1},
-                {"origin", Vector2.One * 50},
-                {"animations", new Dictionary<string, Animation>
-                {
-                    {"default", new Animation(start: 0, end: 0, imagesPerSecond: 2.0f)}
-                }},
-            });
-            player.AddRepresentation<PhysicsRepresentation>(id: "Physics", settings: null);
-            player.AddRepresentation<GameplayRepresentation>(id: "Gameplay", settings: null);
-            player.GetRepresentation<PhysicsRepresentation>(id: "Physics").ApplyForce(Vector2.UnitY * -3000);
-            player.Initialize();
-
-            Entity shape = world.GetEntity<Entity>(id: "Shape");
-            GeometryProperty geo = new PolygonGeometryProperty(new List<Vector2>
-            {
-                new Vector2(0, -16),
-                new Vector2(48, 96),
-                new Vector2(7, 2),
-                new Vector2(-51, 6),
-                new Vector2(-13, -7)
-            });
-            shape.AddIProperty<GeometryProperty>("geometry", geo);
-            shape.AddProperty<Vector2>("position", new Vector2(250, 100));
-            shape.AddRepresentation<PhysicsRepresentation>("physics", null);
-            shape.AddRepresentation<MeshRepresentation>(id: "Power", settings: new GameParams
-            {
-                {"color", Color.DarkGoldenrod}
-            });
-            //shape.AddRepresentation<MeshRepresentation>(id: "Wisdom", settings: new GameParams
+            World.Initialize();
+            World.LoadLevelOne();
+            //world.AddEntity<Entity>(id: "Shape");
+            //world.AddEntity<Player>(id: "Player");
+            //Entity player = world.GetEntity<Player>(id: "Player");
+            //player.AddIProperty<GeometryProperty>(id: "geometry", value: new CircleGeometryProperty() { Radius = 50 });
+            //player.AddProperty<Vector2>("position", new Vector2(300, 250));
+            //player.AddRepresentation<SpriteRepresentation>(id: "Graphics", settings: new GameParams
             //{
-            //    {"color", Color.DarkGoldenrod},
-            //    {"first", new Vector3(-16, 0, 0)},
-            //    {"second", new Vector3(0, 32, 0)},
-            //    {"third", new Vector3(-32, 32, 0)}
+            //    {"spriteName", "Sprites/Circle"},
+            //    {"numOfImages", 1},
+            //    {"numOfColumns", 1},
+            //    {"numOfRows", 1},
+            //    {"origin", Vector2.One * 50},
+            //    {"animations", new Dictionary<string, Animation>
+            //    {
+            //        {"default", new Animation(start: 0, end: 0, imagesPerSecond: 2.0f)}
+            //    }},
             //});
-            //shape.AddRepresentation<MeshRepresentation>(id: "Courage", settings: new GameParams
-            //{
-            //    {"color", Color.Yellow},
-            //    {"first", new Vector3(16, 0, 0)},
-            //    {"second", new Vector3(32, 32, 0)},
-            //    {"third", new Vector3(0, 32, 0)}
-            //});
+            //player.AddRepresentation<PhysicsRepresentation>(id: "Physics", settings: null);
+            //player.AddRepresentation<GameplayRepresentation>(id: "Gameplay", settings: null);
+            //player.GetRepresentation<PhysicsRepresentation>(id: "Physics").ApplyForce(Vector2.UnitY * -3000);
+            //player.Initialize();
 
-            shape.Initialize();
+            //Entity shape = world.GetEntity<Entity>(id: "Shape");
+            //GeometryProperty geo = new PolygonGeometryProperty(new List<Vector2>
+            //{
+            //    new Vector2(0, -16),
+            //    new Vector2(48, 96),
+            //    new Vector2(7, 2),
+            //    new Vector2(-51, 6),
+            //    new Vector2(-13, -7)
+            //});
+            //shape.AddIProperty<GeometryProperty>("geometry", geo);
+            //shape.AddProperty<Vector2>("position", new Vector2(250, 100));
+            //shape.AddRepresentation<PhysicsRepresentation>("physics", null);
+            //shape.AddRepresentation<MeshRepresentation>(id: "Power", settings: new GameParams
+            //{
+            //    {"color", Color.DarkGoldenrod}
+            //});
+            ////shape.AddRepresentation<MeshRepresentation>(id: "Wisdom", settings: new GameParams
+            ////{
+            ////    {"color", Color.DarkGoldenrod},
+            ////    {"first", new Vector3(-16, 0, 0)},
+            ////    {"second", new Vector3(0, 32, 0)},
+            ////    {"third", new Vector3(-32, 32, 0)}
+            ////});
+            ////shape.AddRepresentation<MeshRepresentation>(id: "Courage", settings: new GameParams
+            ////{
+            ////    {"color", Color.Yellow},
+            ////    {"first", new Vector3(16, 0, 0)},
+            ////    {"second", new Vector3(32, 32, 0)},
+            ////    {"third", new Vector3(0, 32, 0)}
+            ////});
+
+            //shape.Initialize();
             base.Initialize();
         }
 
@@ -101,7 +105,7 @@ namespace RadKatanaBrothers
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
-            world.GetManager<RenderManager>(id: "graphics").LoadContent(Content, GraphicsDevice);
+            World.GetManager<RenderManager>(id: "graphics").LoadContent(Content, GraphicsDevice);
             // TODO: use this.Content to load your game content here
         }
 
@@ -139,7 +143,7 @@ namespace RadKatanaBrothers
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-            world.RunAllManagers((float)gameTime.ElapsedGameTime.TotalMilliseconds);
+            World.RunAllManagers((float)gameTime.ElapsedGameTime.TotalMilliseconds);
             base.Draw(gameTime);
         }
     }

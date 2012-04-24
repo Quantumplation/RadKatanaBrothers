@@ -30,6 +30,14 @@ namespace RKBTest
             {
                 added = true;
             }
+            public override void ClearRepresentations()
+            {
+                
+            }
+            public override void RemoveRepresentation(Representation rep)
+            {
+                
+            }
             public override void Run(float elapsedMilliseconds)
             {
                 

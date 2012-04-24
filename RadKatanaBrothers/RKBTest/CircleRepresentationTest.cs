@@ -72,7 +72,7 @@ namespace RKBTest
         [TestMethod()]
         public void CircleRepresentationConstructorTest()
         {
-            World world = new World();
+            World.Initialize();
             Entity entity = Factory.Produce<Entity>();
             entity.AddIProperty<CircleGeometryProperty>("data", new CircleGeometryProperty() { Radius = 160 });
             entity.AddRepresentation<CircleRepresentation>("circle", new GameParams()
@@ -88,7 +88,7 @@ namespace RKBTest
         [TestMethod()]
         public void InitializeTest()
         {
-            World world = new World();
+            World.Initialize();
             Entity entity = Factory.Produce<Entity>();
             entity.AddIProperty<CircleGeometryProperty>("data", new CircleGeometryProperty() { Radius = 160 });
             entity.AddRepresentation<CircleRepresentation>("circle", new GameParams()

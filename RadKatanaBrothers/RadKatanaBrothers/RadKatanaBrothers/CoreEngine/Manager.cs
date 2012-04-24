@@ -8,7 +8,9 @@ namespace RadKatanaBrothers
 {
     public abstract class Manager
     {
-        public abstract void AddRepresentation(Representation rep);
+        public virtual void AddRepresentation(Representation rep) { }
+        public virtual void RemoveRepresentation(Representation rep) { }
+        public abstract void ClearRepresentations();
         public abstract void Run(float elapsedMilliseconds);
     }
 }

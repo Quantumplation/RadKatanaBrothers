@@ -114,10 +114,12 @@
     <Compile Include="CoreEngine\GameParams.cs" />
     <Compile Include="Gameplay\GameplayManager.cs" />
     <Compile Include="Gameplay\GameplayRepresentation.cs" />
+    <Compile Include="Gameplay\Maze.cs" />
+    <Compile Include="Gameplay\StaticSolid.cs" />
     <Compile Include="Graphics\CircleRepresentation.cs" />
     <Compile Include="Graphics\GraphicsRepresentation.cs" />
-    <Compile Include="CoreEngine\PhysicsManager.cs" />
-    <Compile Include="CoreEngine\PhysicsRepresentation.cs" />
+    <Compile Include="Physics\PhysicsManager.cs" />
+    <Compile Include="Physics\PhysicsRepresentation.cs" />
     <Compile Include="CoreEngine\Representation.cs" />
     <Compile Include="CoreEngine\World.cs" />
     <Compile Include="Gameplay\Player.cs" />
@@ -127,7 +129,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
-    <Compile Include="CoreEngine\RenderManager.cs" />
+    <Compile Include="Graphics\RenderManager.cs" />
     <Compile Include="CoreEngine\Property.cs" />
   </ItemGroup>
   <ItemGroup>

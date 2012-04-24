@@ -10,6 +10,19 @@ namespace RadKatanaBrothers
 {
     public class MeshRepresentation : GraphicsRepresentation
     {
+        public static event Created onCreated;
+        public static event Terminated onTerminated;
+        public override void Create()
+        {
+            if (onCreated != null)
+                onCreated(this);
+        }
+        public override void Terminate()
+        {
+            if (onTerminated != null)
+                onTerminated(this);
+        }
+
         Property<Vector2> coPosition;
         Property<double> coRotation;
         PolygonGeometryProperty coGeometry;

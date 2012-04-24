@@ -9,11 +9,18 @@ namespace RadKatanaBrothers
     {
         Dictionary<string, Representation> representations;
         Dictionary<string, IProperty> properties;
+        public EventContainer Events;
+        public string ID
+        {
+            get;
+            set;
+        }
 
-        public Entity()
+        public Entity(GameParams settings = null)
         {
             representations = new Dictionary<string, Representation>();
             properties = new Dictionary<string, IProperty>();
+            Events = new EventContainer();
         }
 
         public void Initialize()
@@ -28,10 +35,6 @@ namespace RadKatanaBrothers
         public void AddRepresentation<T>(string id, GameParams settings) where T : Representation
         {
             representations.Add(id, Factory.Produce<T>(settings));
-        }
-        public void AddRepresentation(string type, string id, GameParams settings)
-        {
-            representations.Add(id, Factory.Produce(type, settings) as Representation);
         }
 
         public T GetRepresentation<T>(string id) where T : Representation
@@ -50,6 +53,12 @@ namespace RadKatanaBrothers
             if (!properties.ContainsKey(id))
                 properties.Add(id, value);
             return (T)properties[id];
+        }
+
+        public void Terminate()
+        {
+            foreach (var representation in representations.Values)
+                representation.Terminate();
         }
     }
 }

@@ -10,6 +10,19 @@ namespace RadKatanaBrothers
 {
     public class CircleRepresentation : GraphicsRepresentation
     {
+        public static event Created onCreated;
+        public static event Terminated onTerminated;
+        public override void Create()
+        {
+            if (onCreated != null)
+                onCreated(this);
+        }
+        public override void Terminate()
+        {
+            if (onTerminated != null)
+                onTerminated(this);
+        }
+
         Property<Vector2> coPosition;
         Property<double> coRotation;
         CircleGeometryProperty coGeometry;
@@ -38,7 +51,7 @@ namespace RadKatanaBrothers
 
         public override void Draw(SpriteBatch spriteBatch, BasicEffect basicEffect)
         {
-            spriteBatch.Draw(circle, coPosition.Value, null, Color.White, (float)coRotation.Value, new Vector2(circle.Width / 2, circle.Height / 2), (float)(2.0f * (coGeometry as CircleGeometryProperty).Radius / circle.Width), SpriteEffects.None, 0.0f);
+            spriteBatch.Draw(circle, coPosition.Value, null, color, (float)coRotation.Value, new Vector2(circle.Width / 2, circle.Height / 2), (float)(2.0f * (coGeometry as CircleGeometryProperty).Radius / circle.Width), SpriteEffects.None, 0.0f);
         }
     }
 }
