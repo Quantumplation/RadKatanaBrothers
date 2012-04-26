@@ -18,6 +18,7 @@ namespace RadKatanaBrothers
             AddProperty<int>(id: "score", value: 25000);
             AddProperty<String>(id: "text", value: "Hello World!");
             AddProperty<Vector2>(id: "textOffset", value: new Vector2(0, 32));
+            AddProperty<bool>(id: "dead", value: false);
             AddRepresentation<CircleRepresentation>(id: "graphics", settings: new GameParams()
             {
                 {"color", Color.Gainsboro}
@@ -32,11 +33,16 @@ namespace RadKatanaBrothers
                 (GetIProperty("score") as Property<int>).Value -= 10;
                 if (other.AddProperty<bool>("deadly", false).Value)
                 {
-                    (GetIProperty("score") as Property<int>).Value = 1;
+                    AddProperty<bool>("dead", true).Value = true;
+                    (GetIProperty("score") as Property<int>).Value = 0;
                     World.PrepareToRemoveEntity(ID);
                 }
+
                 if (other.AddProperty<bool>("victory", false).Value)
+                {
+                    AddProperty<bool>("dead", true).Value = true;
                     World.PrepareToRemoveEntity(ID);
+                }
             });
         }
     }

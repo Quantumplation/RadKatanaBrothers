@@ -77,7 +77,7 @@ namespace RadKatanaBrothers
             //}
         }
 
-        public const bool SERVER = false;
+        public const bool SERVER = true;
 
         public void UpdateProperty(string entityID, Vector2 position)
         {
