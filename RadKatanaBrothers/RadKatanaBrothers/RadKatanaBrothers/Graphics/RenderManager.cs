@@ -12,6 +12,7 @@ namespace RadKatanaBrothers
     {
         SpriteBatch spriteBatch;
         BasicEffect basicEffect;
+        ContentManager Content;
         List<GraphicsRepresentation> representations;
 
         public RenderManager()
@@ -40,8 +41,9 @@ namespace RadKatanaBrothers
             representations.Remove(rep as GraphicsRepresentation);
         }
 
-        public void LoadContent(ContentManager Content, GraphicsDevice GraphicsDevice)
+        public void LoadContent(ContentManager content, GraphicsDevice GraphicsDevice)
         {
+            Content = content;
             basicEffect = new BasicEffect(GraphicsDevice);
             basicEffect.VertexColorEnabled = true;
             basicEffect.Projection = Matrix.CreateOrthographicOffCenter(
@@ -52,9 +54,6 @@ namespace RadKatanaBrothers
                 0,
                 1);
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            foreach (var representation in representations)
-                representation.LoadContent(Content);
         }
 
         public override void Run(float elapsedMilliseconds)
@@ -67,10 +66,10 @@ namespace RadKatanaBrothers
                 foreach (var representation in representations)
                     representation.Draw(spriteBatch, basicEffect);
             }
-            catch (NullReferenceException e)
+            catch (NullReferenceException)
             {
-                Console.Error.WriteLine(e.Message);
-                return;
+                foreach (var representation in representations)
+                    representation.LoadContent(Content);
             }
             finally
             {

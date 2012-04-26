@@ -39,9 +39,8 @@ namespace RadKatanaBrothers
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            Random rand = new Random();
             World.Initialize();
-            World.LoadMaze(rand.Next());
+            //World.LoadMaze(42);
             base.Initialize();
         }
 

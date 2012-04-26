@@ -17,13 +17,17 @@ namespace TestClient
             while (true)
             {
                 byte[] buffer = new byte[1024];
-                sock.Receive(buffer, SocketFlags.None);
-                using (MemoryStream DataArray = new MemoryStream(buffer))
-                {
-                    BinaryFormatter DataSerializer = new BinaryFormatter();
-                    var obj = DataSerializer.Deserialize(DataArray);
-                    Console.WriteLine(obj as String);
-                }
+                buffer[0] = 0;
+                buffer[4] = 42;
+                sock.Send(buffer);
+                while (true) {}
+                //sock.Receive(buffer, SocketFlags.None);
+                //using (MemoryStream DataArray = new MemoryStream(buffer))
+                //{
+                //    BinaryFormatter DataSerializer = new BinaryFormatter();
+                //    var obj = DataSerializer.Deserialize(DataArray);
+                //    Console.WriteLine((int)obj);
+                //}
             }
         }
     }
