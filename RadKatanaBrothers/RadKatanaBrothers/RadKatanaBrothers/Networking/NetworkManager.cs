@@ -36,14 +36,14 @@ namespace RadKatanaBrothers
             updates = new Dictionary<string, Vector2>();
             if (SERVER)
             {
-                updates["player2"] = Vector2.Zero;
+                updates["player2"] = new Vector2(72, 72);
                 TcpListener listener = new TcpListener(IPAddress.Any, 9001);
                 listener.Start();
                 listener.BeginAcceptSocket(OnConnection, listener);
             }
             else
             {
-                updates["player1"] = Vector2.Zero;
+                updates["player1"] = new Vector2(72, 72);
                 Socket sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 sock.BeginConnect("localhost", 9001, OnConnected, sock);
             }
@@ -94,7 +94,6 @@ namespace RadKatanaBrothers
         public void OnDataSent(IAsyncResult ar)
         {
             connection.EndSend(ar);
-            
         }
 
         Dictionary<string, Vector2> updates;
@@ -118,12 +117,16 @@ namespace RadKatanaBrothers
             connection = listener.EndAcceptSocket(ar);
             byte[] buffer = new byte[1024];
             Random rand = new Random();
-            buffer[0] = 0;
-            int seed = rand.Next();
-            Array.Copy(BitConverter.GetBytes(seed), 0, buffer, 1, sizeof(int));
-            World.LoadMaze(seed);
-            connection.Send(buffer);
-            Array.Clear(buffer, 0, 1024);
+            if (!mazeMade)
+            {
+                buffer[0] = 0;
+                int seed = rand.Next();
+                Array.Copy(BitConverter.GetBytes(seed), 0, buffer, 1, sizeof(int));
+                World.LoadMaze(seed);
+                connection.Send(buffer);
+                Array.Clear(buffer, 0, 1024);
+                mazeMade = true;
+            }
             connection.BeginReceive(buffer, 0, 1024, SocketFlags.None, OnReceiveData, buffer);
         }
 
