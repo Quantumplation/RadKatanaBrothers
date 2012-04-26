@@ -14,7 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestClient", "TestClient\TestClient.csproj", "{032EA6A4-E1AB-4332-851F-12C6061D64DC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestClient", "TestClient\TestClient.csproj", "{F4CCDC38-341D-4694-ADA9-FED9A2949771}"
 EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
@@ -55,16 +55,16 @@ Global
 		{577F77D8-3DDF-421D-AED3-48CF0AB43E49}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{577F77D8-3DDF-421D-AED3-48CF0AB43E49}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{577F77D8-3DDF-421D-AED3-48CF0AB43E49}.Release|x86.ActiveCfg = Release|Any CPU
-		{032EA6A4-E1AB-4332-851F-12C6061D64DC}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{032EA6A4-E1AB-4332-851F-12C6061D64DC}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{032EA6A4-E1AB-4332-851F-12C6061D64DC}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{032EA6A4-E1AB-4332-851F-12C6061D64DC}.Debug|x86.ActiveCfg = Debug|x86
-		{032EA6A4-E1AB-4332-851F-12C6061D64DC}.Debug|x86.Build.0 = Debug|x86
-		{032EA6A4-E1AB-4332-851F-12C6061D64DC}.Release|Any CPU.ActiveCfg = Release|x86
-		{032EA6A4-E1AB-4332-851F-12C6061D64DC}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{032EA6A4-E1AB-4332-851F-12C6061D64DC}.Release|Mixed Platforms.Build.0 = Release|x86
-		{032EA6A4-E1AB-4332-851F-12C6061D64DC}.Release|x86.ActiveCfg = Release|x86
-		{032EA6A4-E1AB-4332-851F-12C6061D64DC}.Release|x86.Build.0 = Release|x86
+		{F4CCDC38-341D-4694-ADA9-FED9A2949771}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{F4CCDC38-341D-4694-ADA9-FED9A2949771}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{F4CCDC38-341D-4694-ADA9-FED9A2949771}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{F4CCDC38-341D-4694-ADA9-FED9A2949771}.Debug|x86.ActiveCfg = Debug|x86
+		{F4CCDC38-341D-4694-ADA9-FED9A2949771}.Debug|x86.Build.0 = Debug|x86
+		{F4CCDC38-341D-4694-ADA9-FED9A2949771}.Release|Any CPU.ActiveCfg = Release|x86
+		{F4CCDC38-341D-4694-ADA9-FED9A2949771}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{F4CCDC38-341D-4694-ADA9-FED9A2949771}.Release|Mixed Platforms.Build.0 = Release|x86
+		{F4CCDC38-341D-4694-ADA9-FED9A2949771}.Release|x86.ActiveCfg = Release|x86
+		{F4CCDC38-341D-4694-ADA9-FED9A2949771}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

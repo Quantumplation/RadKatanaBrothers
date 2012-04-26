@@ -55,7 +55,7 @@ namespace RadKatanaBrothers
 
         public override void Draw(SpriteBatch spriteBatch, BasicEffect basicEffect)
         {
-            spriteBatch.DrawString(font, text.Value, parentPosition.Value + offset.Value, color.Value);
+            spriteBatch.DrawString(font, text.Value, parentPosition.Value + offset.Value - (font.MeasureString(text.Value) / 2) * Vector2.UnitX, color.Value);
         }
     }
 }

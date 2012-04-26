@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using System.Xml;
+using Microsoft.Xna.Framework.Input;
 
 namespace RadKatanaBrothers
 {
@@ -27,12 +28,9 @@ namespace RadKatanaBrothers
             AddManager<RenderManager>(id: "graphics");
             AddManager<PhysicsManager>(id: "physics");
             AddManager<GameplayManager>(id: "gameplay");
-            AddManager<NetworkManager>(id: "network");
-            GetManager<NetworkManager>(id: "network").Initialize();
             Factory.RegisterManager<RenderManager>(GetManager<RenderManager>(id: "graphics"), typeof(CircleRepresentation), typeof(MeshRepresentation), typeof(SpriteRepresentation), typeof(TextRepresentation));
             Factory.RegisterManager<PhysicsManager>(GetManager<PhysicsManager>(id: "physics"), typeof(PhysicsRepresentation));
             Factory.RegisterManager<GameplayManager>(GetManager<GameplayManager>(id: "gameplay"), typeof(GameplayRepresentation));
-            Factory.RegisterManager<NetworkManager>(GetManager<NetworkManager>(id: "network"), typeof(NetworkRepresentation));
             Factory.RegisterCallback<Entity>((settings) => new Entity(settings));
             Factory.RegisterCallback<Player>((settings) => new Player(settings));
             Factory.RegisterCallback<StaticSolid>((settings) => new StaticSolid(settings));
@@ -42,26 +40,11 @@ namespace RadKatanaBrothers
             Factory.RegisterCallback<TextRepresentation>((settings) => new TextRepresentation(settings));
             Factory.RegisterCallback<PhysicsRepresentation>((settings) => new PhysicsRepresentation());
             Factory.RegisterCallback<GameplayRepresentation>((settings) => new GameplayRepresentation());
-            Factory.RegisterCallback<NetworkRepresentation>((settings) => new NetworkRepresentation(settings));
         }
 
         public static void LoadMaze(int seed)
         {
             ClearLevel();
-            //AddEntity<StaticSolid>("floor", new GameParams()
-            //{
-            //    {"collisionMaskVisible", true},
-            //    {"polygonVertices", new List<Vector2>()
-            //        {
-            //            new Vector2(0, 688),
-            //            new Vector2(720, 688),
-            //            new Vector2(720, 720),
-            //            new Vector2(0, 720)
-            //        }
-            //    },
-            //    {"color", Color.PaleTurquoise},
-            //    {"deadly", true}
-            //});
             Maze maze = new Maze();
             List<GameParams> rectangles = maze.CreateMaze(seed);
             for (int i = 0; i < rectangles.Count; ++i)
@@ -107,22 +90,8 @@ namespace RadKatanaBrothers
                     new Vector2(Maze.GRID_DIMENSIONS * Maze.CELL_SIZE),
                     new Vector2((Maze.GRID_DIMENSIONS - 1) * Maze.CELL_SIZE, Maze.GRID_DIMENSIONS * Maze.CELL_SIZE)
                 }},
-                //{"polygonVertices", new List<Vector2>()
-                //{
-                //    new Vector2((Maze.GRID_DIMENSIONS - 2) * Maze.CELL_SIZE),
-                //    new Vector2(Maze.GRID_DIMENSIONS * Maze.CELL_SIZE, (Maze.GRID_DIMENSIONS - 2) * Maze.CELL_SIZE),
-                //    new Vector2(Maze.GRID_DIMENSIONS * Maze.CELL_SIZE),
-                //    new Vector2((Maze.GRID_DIMENSIONS - 2) * Maze.CELL_SIZE, Maze.GRID_DIMENSIONS * Maze.CELL_SIZE)
-                //}},
-                //{"polygonVertices", new List<Vector2>()
-                //{
-                //    new Vector2((Maze.GRID_DIMENSIONS - 2) * Maze.CELL_SIZE, (Maze.GRID_DIMENSIONS - 2) * Maze.CELL_SIZE),
-                //    new Vector2((Maze.GRID_DIMENSIONS - 1) * Maze.CELL_SIZE, (Maze.GRID_DIMENSIONS - 2) * Maze.CELL_SIZE),
-                //    new Vector2((Maze.GRID_DIMENSIONS - 1) * Maze.CELL_SIZE, (Maze.GRID_DIMENSIONS - 1) * Maze.CELL_SIZE),
-                //    new Vector2((Maze.GRID_DIMENSIONS - 2) * Maze.CELL_SIZE, (Maze.GRID_DIMENSIONS - 1) * Maze.CELL_SIZE)
-                //}},
                 {"color", Color.Red},
-                {"deadly", true}
+                {"victory", true}
             });
             GetEntity<StaticSolid>("goal").AddProperty<Vector2>("position", Vector2.Zero).Value -= new Vector2(Maze.CELL_SIZE);
 
@@ -132,11 +101,13 @@ namespace RadKatanaBrothers
 
         static void ClearLevel()
         {
-            entities.Clear();
+            foreach (var entity in entities.Keys)
+                PrepareToRemoveEntity(entity);
             foreach (var manager in managers.Values)
                 manager.ClearRepresentations();
         }
 
+        public static bool hack = false;
         public static void AddEntity<T>(string id, GameParams settings = null) where T : Entity
         {
             T entity = Factory.Produce<T>(settings);
@@ -158,18 +129,15 @@ namespace RadKatanaBrothers
             return (managers[id] as T);
         }
 
-        public static bool Running
-        {
-            get;
-            set;
-        }
-
         public static void RunAllManagers(float elapsedMilliseconds)
         {
-            if (!Running)
-                return;
             foreach (var manager in managers.Values)
                 manager.Run(elapsedMilliseconds);
+            if (Keyboard.GetState().IsKeyDown(Keys.Space) && !hack)
+            {
+                LoadMaze(9034);
+                hack = true;
+            }
             for (int i = 0; i < entitiesToRemove.Count; ++i)
             {
                 entities[entitiesToRemove[i]].Terminate();

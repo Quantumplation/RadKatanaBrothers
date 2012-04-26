@@ -145,31 +145,5 @@ namespace RadKatanaBrothers
                     throw new InvalidOperationException();
             }
         }
-
-        //struct Edge
-        //{
-        //    public Edge(float distanceFromOrigin, Vector2 normalVector)
-        //    {
-        //        distance = distanceFromOrigin;
-        //        normal = normalVector;
-        //    }
-        //    public float distance;
-        //    public Vector2 normal;
-        //}
-        //public static Edge FindClosestEdge(List<Vector2> points)
-        //{
-        //    Edge closestEdge = new Edge(float.PositiveInfinity, Vector2.Zero);
-        //    for (int i = 0; i < points.Count; ++i)
-        //    {
-        //        int j = (i == points.Count - 1 ? 0 : i + i);
-        //        Vector2 currentEdge = points[j] - points[i];
-        //        Vector2 originToPoint = points[i];
-        //        Vector2 normal = Vector2.Dot(originToPoint, originToPoint) * currentEdge - Vector2.Dot(originToPoint, currentEdge) * originToPoint;
-        //        normal.Normalize();
-        //        float distanceFromOrigin = Vector2.Dot(normal, originToPoint);
-        //        if (distanceFromOrigin < closestEdge.distance)
-        //    }
-        //    return closestEdge;
-        //}
     }
 }

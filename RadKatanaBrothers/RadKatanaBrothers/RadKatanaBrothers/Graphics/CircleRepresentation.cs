@@ -26,7 +26,7 @@ namespace RadKatanaBrothers
         Property<Vector2> coPosition;
         Property<double> coRotation;
         CircleGeometryProperty coGeometry;
-        Texture2D circle;
+        static Texture2D circle;
         Color color;
 
         public CircleRepresentation(GameParams Settings)
