@@ -17,6 +17,8 @@ namespace RadKatanaBrothers
 
         public void Run(NetworkManager manager)
         {
+            (Parent.GetIProperty("score") as Property<int>).Value -= 1;
+
             if (manager.HasProperty(Parent.ID))
                 position.Value = manager.ReadProperty(Parent.ID);
             else

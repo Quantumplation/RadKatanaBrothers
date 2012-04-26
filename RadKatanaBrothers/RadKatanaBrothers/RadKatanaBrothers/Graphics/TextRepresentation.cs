@@ -50,7 +50,7 @@ namespace RadKatanaBrothers
 
         public override void Update(float elapsedMilliseconds)
         {
-            text.Value = World.Score.ToString();
+            text.Value = (Parent.GetIProperty("score") as Property<int>).Value.ToString();
         }
 
         public override void Draw(SpriteBatch spriteBatch, BasicEffect basicEffect)

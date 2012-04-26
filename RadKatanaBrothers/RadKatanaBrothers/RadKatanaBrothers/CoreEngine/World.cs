@@ -13,11 +13,6 @@ namespace RadKatanaBrothers
         static Dictionary<string, Entity> entities;
         static Dictionary<string, Manager> managers;
         static List<string> entitiesToRemove;
-        public static int Score
-        {
-            get;
-            set;
-        }
 
         static bool running = false;
         public static bool Running

@@ -23,13 +23,8 @@ namespace RadKatanaBrothers
         }
         public void Update()
         {
-            World.Score -= 1;
             MouseState mouse = Mouse.GetState();
             KeyboardState keyboard = Keyboard.GetState();
-//            if (keyboard.IsKeyDown(Keys.Left))
-//                Parent.GetRepresentation<PhysicsRepresentation>("physics").ApplyForce(new Vector2(-250, 0));
-//            if (keyboard.IsKeyDown(Keys.Right))
-//                Parent.GetRepresentation<PhysicsRepresentation>("physics").ApplyForce(new Vector2(250, 0));
             if (mouse.LeftButton == ButtonState.Pressed)
                 Parent.GetRepresentation<PhysicsRepresentation>("physics").ApplyForce(new Vector2(mouse.X, mouse.Y) - Parent.AddProperty<Vector2>("position", new Vector2(300, 250)).Value);
         }
