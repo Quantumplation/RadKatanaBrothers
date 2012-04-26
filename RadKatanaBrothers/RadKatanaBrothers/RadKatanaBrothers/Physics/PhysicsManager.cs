@@ -46,7 +46,8 @@ namespace RadKatanaBrothers
                 foreach (var objB in caPhysicalObjects)
                 {
                     var tuple = Tuple.Create(objB, objA);
-                    if (CheckCollision(objA.Geometry, objB.Geometry) && objA != objB && !resolvedPairs.Contains(tuple))
+                    List<Vector2> simplex;
+                    if (CheckCollision(objA.Geometry, objB.Geometry, out simplex) && objA != objB && !resolvedPairs.Contains(tuple))
                     {
                         // Collision response here: Need to implement the EPA algorithm
                         // For now just apply a force directly away on both objects.
@@ -70,10 +71,10 @@ namespace RadKatanaBrothers
                 obj.Update(elapsedMilliseconds);
         }
 
-        public static bool CheckCollision(GeometryProperty objA, GeometryProperty objB)
+        public static bool CheckCollision(GeometryProperty objA, GeometryProperty objB, out List<Vector2> points)
         {
             Vector2 currentPoint = Support(objA, objB, objB.Position - objA.Position);
-            List<Vector2> points = new List<Vector2>(){ currentPoint };
+            points = new List<Vector2>(){ currentPoint };
             Vector2 direction = -currentPoint;
 
             do

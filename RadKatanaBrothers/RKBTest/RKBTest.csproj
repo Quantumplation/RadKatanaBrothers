@@ -75,10 +75,6 @@
     <Compile Include="WorldTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RadKatanaBrothers\RadKatanaBrothersContent\RadKatanaBrothersContent.contentproj">
-      <Project>{E16645AB-EF15-4260-9AD6-D048146107E9}</Project>
-      <Name>RadKatanaBrothersContent %28Content%29</Name>
-    </ProjectReference>
     <ProjectReference Include="..\RadKatanaBrothers\RadKatanaBrothers\RadKatanaBrothers.csproj">
       <Project>{694A0254-6BAE-4E38-9720-A6B795BCB70A}</Project>
       <Name>RadKatanaBrothers</Name>

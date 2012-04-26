@@ -27,7 +27,8 @@ namespace RKBTest
                 GeometryProperty objB = new CircleGeometryProperty() { Position = Vector2.UnitX * x, Radius = 5.0f }; // TODO: Initialize to an appropriate value
                 bool expected = x < 15;
                 bool actual;
-                actual = PhysicsManager.CheckCollision(objA, objB);
+                List<Vector2> simplex;
+                actual = PhysicsManager.CheckCollision(objA, objB, out simplex);
                 Assert.AreEqual(expected, actual);
             }
         }
@@ -44,7 +45,8 @@ namespace RKBTest
                     GeometryProperty objB = new SweptCircleGeometryProperty() { Position = position, Radius = 5.0f }; // TODO: Initialize to an appropriate value
                     bool expected = position.Length() < 15;
                     bool actual;
-                    actual = PhysicsManager.CheckCollision(objA, objB);
+                    List<Vector2> simplex;
+                    actual = PhysicsManager.CheckCollision(objA, objB, out simplex);
                     Assert.AreEqual(expected, actual);
                 }
             }
@@ -65,7 +67,8 @@ namespace RKBTest
                                                                     new Vector2(7, 1)  ,new Vector2(4, 5),
                                                                     new Vector2(-6, 0) ,new Vector2(-1, -6) }) { Position = new Vector2(x, 0) };
                 bool expected = x <= 12;
-                bool actual = PhysicsManager.CheckCollision(objA, objB);
+                List<Vector2> simplex;
+                bool actual = PhysicsManager.CheckCollision(objA, objB, out simplex);
                 Assert.AreEqual(expected, actual);
             }
         }

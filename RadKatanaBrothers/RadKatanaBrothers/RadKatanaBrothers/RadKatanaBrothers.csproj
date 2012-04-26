@@ -127,6 +127,8 @@
     <Compile Include="CoreEngine\Manager.cs" />
     <Compile Include="Graphics\MeshRepresentation.cs" />
     <Compile Include="Graphics\SpriteRepresentation.cs" />
+    <Compile Include="Networking\NetworkManager.cs" />
+    <Compile Include="Networking\NetworkRepresentation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />

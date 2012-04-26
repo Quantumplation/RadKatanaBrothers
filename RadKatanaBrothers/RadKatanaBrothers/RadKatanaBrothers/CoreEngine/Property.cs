@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using System.ComponentModel;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace RadKatanaBrothers
 {
@@ -15,6 +17,7 @@ namespace RadKatanaBrothers
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(value));
         }
+        public abstract int WriteTo(int offset, ref byte[] buffer);
     }
 
     public class Property<T> : IProperty
@@ -30,6 +33,17 @@ namespace RadKatanaBrothers
         {
             Value = value;
         }
+
+        public override int WriteTo(int offset, ref byte[] buffer)
+        {
+            using (MemoryStream DataArray = new MemoryStream())
+            {
+                BinaryFormatter DataSerializer = new BinaryFormatter();
+                DataSerializer.Serialize(DataArray, Value);
+                Array.Copy(DataArray.ToArray(), 0, buffer, offset, DataArray.Length);
+                return (int)DataArray.Length;
+            }
+        }
     }
 
     public abstract class GeometryProperty : IProperty
@@ -41,6 +55,11 @@ namespace RadKatanaBrothers
         }
 
         public abstract Vector2 Furthest(Vector2 Direction);
+
+        public override int WriteTo(int offset, ref byte[] buffer)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class CircleGeometryProperty : GeometryProperty

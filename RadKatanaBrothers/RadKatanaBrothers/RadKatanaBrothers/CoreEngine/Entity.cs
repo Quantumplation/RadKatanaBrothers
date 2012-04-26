@@ -42,6 +42,13 @@ namespace RadKatanaBrothers
             return (representations[id] as T);
         }
 
+        public IProperty GetIProperty(string id)
+        {
+            if (properties.ContainsKey(id))
+                return properties[id];
+            return null;
+        }
+
         public Property<T> AddProperty<T>(string id, T value)
         {
             if (!properties.ContainsKey(id))
