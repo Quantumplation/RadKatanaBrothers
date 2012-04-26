@@ -58,11 +58,13 @@ namespace RadKatanaBrothers
 
         public override void Run(float elapsedMilliseconds)
         {
+            if (!World.Running)
+                return;
             try
             {
+                spriteBatch.Begin();
                 foreach (var representation in representations)
                     representation.Update(elapsedMilliseconds);
-                spriteBatch.Begin();
                 foreach (var representation in representations)
                     representation.Draw(spriteBatch, basicEffect);
             }

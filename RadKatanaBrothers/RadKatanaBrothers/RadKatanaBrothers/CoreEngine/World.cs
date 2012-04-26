@@ -19,14 +19,16 @@ namespace RadKatanaBrothers
             set;
         }
 
+        static bool running = false;
         public static bool Running
         {
-            get;
-            set;
+            get { return running; }
+            set { lock (lockObj) { running = value; } }
         }
 
         public static void Initialize()
         {
+            lockObj = new Int32();
             entities = new Dictionary<string, Entity>();
             managers = new Dictionary<string, Manager>();
             entitiesToRemove = new List<string>();
@@ -54,34 +56,36 @@ namespace RadKatanaBrothers
 
         public static void LoadMaze(int seed)
         {
-            ClearLevel();
-            Maze maze = new Maze();
-            List<GameParams> rectangles = maze.CreateMaze(seed);
-            for (int i = 0; i < rectangles.Count; ++i)
-                AddEntity<StaticSolid>("maze" + i, rectangles[i]);
-            AddEntity<Player>("player1", new GameParams()
+            lock (lockObj)
+            {
+                ClearLevel();
+                Maze maze = new Maze();
+                List<GameParams> rectangles = maze.CreateMaze(seed);
+                for (int i = 0; i < rectangles.Count; ++i)
+                    AddEntity<StaticSolid>("maze" + i, rectangles[i]);
+                AddEntity<Player>("player1", new GameParams()
             {
                 {"position", new Vector2(72, 72)},
                 {"remote", !NetworkManager.SERVER }
             });
 
-            AddEntity<Player>("player2", new GameParams()
+                AddEntity<Player>("player2", new GameParams()
             {
                 {"position", new Vector2(148, 72)},
                 {"remote", NetworkManager.SERVER}
             });
-            Random rand = new Random(seed);
-            List<Vector2> usedPoints = new List<Vector2>();
-            for (int i = 0; i < 50; ++i)
-            {
-                int x, y;
-                do
+                Random rand = new Random(seed);
+                List<Vector2> usedPoints = new List<Vector2>();
+                for (int i = 0; i < 50; ++i)
                 {
-                    x = (2 * rand.Next(Maze.GRID_DIMENSIONS)) * Maze.CELL_SIZE;
-                    y = (2 * rand.Next(Maze.GRID_DIMENSIONS)) * Maze.CELL_SIZE;
-                } while (usedPoints.Contains(new Vector2(x, y)));
-                usedPoints.Add(new Vector2(x,y));
-                AddEntity<StaticSolid>("obstacle" + i, new GameParams()
+                    int x, y;
+                    do
+                    {
+                        x = (2 * rand.Next(Maze.GRID_DIMENSIONS)) * Maze.CELL_SIZE;
+                        y = (2 * rand.Next(Maze.GRID_DIMENSIONS)) * Maze.CELL_SIZE;
+                    } while (usedPoints.Contains(new Vector2(x, y)));
+                    usedPoints.Add(new Vector2(x, y));
+                    AddEntity<StaticSolid>("obstacle" + i, new GameParams()
                 {
                     {"deadly", true},
                     {"collisionMaskVisible", true},
@@ -94,10 +98,10 @@ namespace RadKatanaBrothers
                         new Vector2(0, Maze.CELL_SIZE)
                     }}
                 });
-                GetEntity<StaticSolid>("obstacle" + i).AddProperty<Vector2>("position", new Vector2(x, y));
+                    GetEntity<StaticSolid>("obstacle" + i).AddProperty<Vector2>("position", new Vector2(x, y));
 
-            }
-            AddEntity<StaticSolid>("goal", new GameParams()
+                }
+                AddEntity<StaticSolid>("goal", new GameParams()
             {
                 {"collisionMaskVisible", true},
                 {"polygonVertices", new List<Vector2>()
@@ -110,10 +114,11 @@ namespace RadKatanaBrothers
                 {"color", Color.Red},
                 {"victory", true}
             });
-            GetEntity<StaticSolid>("goal").AddProperty<Vector2>("position", Vector2.Zero).Value -= new Vector2(Maze.CELL_SIZE);
+                GetEntity<StaticSolid>("goal").AddProperty<Vector2>("position", Vector2.Zero).Value -= new Vector2(Maze.CELL_SIZE);
 
-            foreach (var entity in entities.Values)
-                entity.Initialize();
+                foreach (var entity in entities.Values)
+                    entity.Initialize();
+            }
         }
 
         static void ClearLevel()
@@ -146,23 +151,28 @@ namespace RadKatanaBrothers
             return (managers[id] as T);
         }
 
+        static object lockObj;
+
         public static void RunAllManagers(float elapsedMilliseconds)
         {
             if (!Running)
                 return;
-            foreach (var manager in managers.Values)
-                manager.Run(elapsedMilliseconds);
-            if (Keyboard.GetState().IsKeyDown(Keys.Space) && !hack)
+            lock (lockObj)
             {
-                LoadMaze(9034);
-                hack = true;
+                foreach (var manager in managers.Values)
+                    manager.Run(elapsedMilliseconds);
+                if (Keyboard.GetState().IsKeyDown(Keys.Space) && !hack)
+                {
+                    LoadMaze(9034);
+                    hack = true;
+                }
+                for (int i = 0; i < entitiesToRemove.Count; ++i)
+                {
+                    entities[entitiesToRemove[i]].Terminate();
+                    entities.Remove(entitiesToRemove[i]);
+                }
+                entitiesToRemove.Clear();
             }
-            for (int i = 0; i < entitiesToRemove.Count; ++i)
-            {
-                entities[entitiesToRemove[i]].Terminate();
-                entities.Remove(entitiesToRemove[i]);
-            }
-            entitiesToRemove.Clear();
         }
 
         public static void PrepareToRemoveEntity(string id)

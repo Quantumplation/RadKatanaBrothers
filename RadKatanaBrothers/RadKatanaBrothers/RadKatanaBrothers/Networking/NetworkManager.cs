@@ -77,7 +77,7 @@ namespace RadKatanaBrothers
             //}
         }
 
-        public const bool SERVER = false;
+        public const bool SERVER = true;
 
         public void UpdateProperty(string entityID, Vector2 position)
         {
@@ -88,7 +88,13 @@ namespace RadKatanaBrothers
             Array.Copy(encoding.GetBytes(entityID), 0, buffer, 1 + sizeof(int), entityID.Length);
             Array.Copy(BitConverter.GetBytes((double)position.X), 0, buffer, 1 + sizeof(int) + entityID.Length, sizeof(double));
             Array.Copy(BitConverter.GetBytes((double)position.Y), 0, buffer, 1 + sizeof(int) + entityID.Length + sizeof(double), sizeof(double));
-            connection.Send(buffer);
+            connection.BeginSend(buffer, 0, 1024, SocketFlags.None, OnDataSent, null);
+        }
+
+        public void OnDataSent(IAsyncResult ar)
+        {
+            connection.EndSend(ar);
+            
         }
 
         Dictionary<string, Vector2> updates;
