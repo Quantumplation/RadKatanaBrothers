@@ -29,7 +29,7 @@ namespace RadKatanaBrothers
                     AddRepresentation<CircleRepresentation>("circleMask", settings);
             }
             AddProperty<double>("mass", double.PositiveInfinity);
-            //AddRepresentation<PhysicsRepresentation>("physics", new GameParams());
+            AddRepresentation<PhysicsRepresentation>("physics", new GameParams());
             if (settings["spriteName"] != null)
                 AddRepresentation<SpriteRepresentation>("graphics", settings);
         }

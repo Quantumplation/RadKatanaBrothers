@@ -64,6 +64,7 @@
     <Compile Include="EntityTest.cs" />
     <Compile Include="FactoryTest.cs" />
     <Compile Include="GameParamsTest.cs" />
+    <Compile Include="MazeTest.cs" />
     <Compile Include="MeshRepresentationTest.cs" />
     <Compile Include="PhysicsManagerTest.cs" />
     <Compile Include="PhysicsRepresentationTest.cs" />

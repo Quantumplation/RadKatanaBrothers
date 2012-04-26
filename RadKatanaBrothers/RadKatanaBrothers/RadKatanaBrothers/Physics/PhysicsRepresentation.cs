@@ -74,6 +74,17 @@ namespace RadKatanaBrothers
             coAngularAcceleration = Parent.AddProperty<double>("angularAcceleration", 0.0f);
 
             coGeometry.Position = coPosition.Value;
+
+            coPosition.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(coPosition_PropertyChanged);
+        }
+
+        void coPosition_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (queueing)
+            {
+                queuedMovements += coPosition.Value - previousMovements;
+            }
+            previousMovements = coPosition.Value;
         }
 
         public virtual void ApplyForce(Vector2 force) { ApplyForce(force, Vector2.Zero); }
@@ -82,6 +93,24 @@ namespace RadKatanaBrothers
             if (!coForces.ContainsKey(origin))
                 coForces[origin] = Vector2.Zero;
             coForces[origin] += force;
+        }
+
+        bool queueing = true;
+        Vector2 previousMovements;
+        Vector2 queuedMovements;
+
+        public void RejectMovements()
+        {
+            queueing = false;
+            coPosition.Value -= queuedMovements;
+            coAcceleration.Value = Vector2.Zero;
+            coVelocity.Value = Vector2.Zero;
+            queueing = true;
+        }
+
+        public void AcceptMovements()
+        {
+            queuedMovements = Vector2.Zero;
         }
 
         public void Update(float elapsedMilliseconds)

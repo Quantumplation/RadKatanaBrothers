@@ -3,19 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
+using System.ComponentModel;
 
 namespace RadKatanaBrothers
 {
-    public interface IProperty
+    public abstract class IProperty : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void propChanged(string value = "Value")
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(value));
+        }
     }
 
     public class Property<T> : IProperty
     {
+        T value;
         public T Value
         {
-            get;
-            set;
+            get { return value; }
+            set { this.value = value; propChanged(); }
         }
 
         public Property(T value)

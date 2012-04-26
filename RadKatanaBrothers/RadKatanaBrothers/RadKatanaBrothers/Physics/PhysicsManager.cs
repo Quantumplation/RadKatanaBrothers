@@ -42,7 +42,7 @@ namespace RadKatanaBrothers
             List<Tuple<PhysicsRepresentation, PhysicsRepresentation>> resolvedPairs = new List<Tuple<PhysicsRepresentation, PhysicsRepresentation>>();
             foreach (var objA in caPhysicalObjects)
             {
-                objA.ApplyForce(Gravity);
+                //objA.ApplyForce(Gravity);
                 foreach (var objB in caPhysicalObjects)
                 {
                     var tuple = Tuple.Create(objB, objA);
@@ -54,9 +54,14 @@ namespace RadKatanaBrothers
                             objA.Parent.Events.GetEvent<Action<Entity>>("onCollision")(objB.Parent);
                         if (objB.Parent.Events.HasEvent("onCollision"))
                             objB.Parent.Events.GetEvent<Action<Entity>>("onCollision")(objA.Parent);
-                        objA.ApplyForce((objA.Position - objB.Position));
-                        objB.ApplyForce((objB.Position - objA.Position));
+                        objA.RejectMovements();
+                        objB.RejectMovements();
                         resolvedPairs.Add(Tuple.Create(objA, objB));
+                    }
+                    else
+                    {
+                        objA.AcceptMovements();
+                        objB.AcceptMovements();
                     }
                 }
             }
@@ -137,5 +142,31 @@ namespace RadKatanaBrothers
                     throw new InvalidOperationException();
             }
         }
+
+        //struct Edge
+        //{
+        //    public Edge(float distanceFromOrigin, Vector2 normalVector)
+        //    {
+        //        distance = distanceFromOrigin;
+        //        normal = normalVector;
+        //    }
+        //    public float distance;
+        //    public Vector2 normal;
+        //}
+        //public static Edge FindClosestEdge(List<Vector2> points)
+        //{
+        //    Edge closestEdge = new Edge(float.PositiveInfinity, Vector2.Zero);
+        //    for (int i = 0; i < points.Count; ++i)
+        //    {
+        //        int j = (i == points.Count - 1 ? 0 : i + i);
+        //        Vector2 currentEdge = points[j] - points[i];
+        //        Vector2 originToPoint = points[i];
+        //        Vector2 normal = Vector2.Dot(originToPoint, originToPoint) * currentEdge - Vector2.Dot(originToPoint, currentEdge) * originToPoint;
+        //        normal.Normalize();
+        //        float distanceFromOrigin = Vector2.Dot(normal, originToPoint);
+        //        if (distanceFromOrigin < closestEdge.distance)
+        //    }
+        //    return closestEdge;
+        //}
     }
 }

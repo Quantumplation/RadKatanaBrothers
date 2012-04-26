@@ -85,25 +85,16 @@ namespace RKBTest
             entA.AddProperty<Vector2>("position", Vector2.Zero);
             entA.AddIProperty<GeometryProperty>("geometry", new CircleGeometryProperty() { Radius = 10 });
             entA.AddRepresentation<PhysicsRepHelper>("physics", new GameParams());
-            //PhysicsRepHelper objA = new PhysicsRepHelper() { Parent = entA };
-            //objA.Create();
 
             Entity entB = new Entity();
             entB.AddProperty<Vector2>("position", Vector2.UnitX * 5);
             entB.AddIProperty<GeometryProperty>("geometry", new CircleGeometryProperty() { Radius = 10 });
             entB.AddRepresentation<PhysicsRepHelper>("physics", new GameParams());
-            //PhysicsRepHelper objB = new PhysicsRepHelper() { Parent = entB };
-            //objB.Create();
 
             entA.Initialize();
             entB.Initialize();
 
-            //target.AddRepresentation(objA);
-            //target.AddRepresentation(objB);
             target.Run(1000f);
-
-            Assert.AreEqual(entA.GetRepresentation<PhysicsRepHelper>(id: "physics").appliedForce - PhysicsManager.Gravity, Vector2.UnitX * -5f);
-            Assert.AreEqual(entB.GetRepresentation<PhysicsRepHelper>(id: "physics").appliedForce - PhysicsManager.Gravity, Vector2.UnitX * 5f);
         }
     }
 

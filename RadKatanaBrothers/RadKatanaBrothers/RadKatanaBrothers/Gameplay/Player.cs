@@ -10,19 +10,26 @@ namespace RadKatanaBrothers
     {
         public Player(GameParams settings = null)
         {
+
+            World.Score = 25000;
             if (settings == null)
                 settings = new GameParams();
             AddIProperty<GeometryProperty>(id: "geometry", value: new CircleGeometryProperty() { Radius = 16 });
             AddProperty<Vector2>(id: "position", value: (Vector2)(settings["position"] ?? Vector2.Zero));
             AddProperty<Vector2>(id: "acceleration", value: Vector2.UnitY * 50);
+            AddProperty<int>(id: "score", value: 0);
+            AddProperty<String>(id: "text", value: "Hello World!");
+            AddProperty<Vector2>(id: "textOffset", value: new Vector2(-16, 32));
             AddRepresentation<CircleRepresentation>(id: "graphics", settings: new GameParams()
             {
                 {"color", Color.Gainsboro}
             });
             AddRepresentation<PhysicsRepresentation>(id: "physics", settings: new GameParams());
             AddRepresentation<GameplayRepresentation>(id: "gameplay", settings: new GameParams());
+            AddRepresentation<TextRepresentation>(id: "text", settings: new GameParams());
             Events.AddEvent<Action<Entity>>("onCollision", (Entity other) =>
             {
+                World.Score -= 10;
                 if (other.AddProperty<bool>("deadly", false).Value)
                     World.PrepareToRemoveEntity(ID);
             });

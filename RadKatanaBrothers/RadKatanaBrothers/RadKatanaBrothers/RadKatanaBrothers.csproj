@@ -118,6 +118,7 @@
     <Compile Include="Gameplay\StaticSolid.cs" />
     <Compile Include="Graphics\CircleRepresentation.cs" />
     <Compile Include="Graphics\GraphicsRepresentation.cs" />
+    <Compile Include="Graphics\TextRepresentation.cs" />
     <Compile Include="Physics\PhysicsManager.cs" />
     <Compile Include="Physics\PhysicsRepresentation.cs" />
     <Compile Include="CoreEngine\Representation.cs" />

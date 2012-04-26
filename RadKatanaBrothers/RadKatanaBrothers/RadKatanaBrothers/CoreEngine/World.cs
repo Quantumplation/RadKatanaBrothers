@@ -12,6 +12,11 @@ namespace RadKatanaBrothers
         static Dictionary<string, Entity> entities;
         static Dictionary<string, Manager> managers;
         static List<string> entitiesToRemove;
+        public static int Score
+        {
+            get;
+            set;
+        }
 
         public static void Initialize()
         {
@@ -22,7 +27,7 @@ namespace RadKatanaBrothers
             AddManager<RenderManager>(id: "graphics");
             AddManager<PhysicsManager>(id: "physics");
             AddManager<GameplayManager>(id: "gameplay");
-            Factory.RegisterManager<RenderManager>(GetManager<RenderManager>(id: "graphics"), typeof(CircleRepresentation), typeof(MeshRepresentation), typeof(SpriteRepresentation));
+            Factory.RegisterManager<RenderManager>(GetManager<RenderManager>(id: "graphics"), typeof(CircleRepresentation), typeof(MeshRepresentation), typeof(SpriteRepresentation), typeof(TextRepresentation));
             Factory.RegisterManager<PhysicsManager>(GetManager<PhysicsManager>(id: "physics"), typeof(PhysicsRepresentation));
             Factory.RegisterManager<GameplayManager>(GetManager<GameplayManager>(id: "gameplay"), typeof(GameplayRepresentation));
             Factory.RegisterCallback<Entity>((settings) => new Entity(settings));
@@ -31,11 +36,12 @@ namespace RadKatanaBrothers
             Factory.RegisterCallback<SpriteRepresentation>((settings) => new SpriteRepresentation(settings));
             Factory.RegisterCallback<MeshRepresentation>((settings) => new MeshRepresentation(settings));
             Factory.RegisterCallback<CircleRepresentation>((settings) => new CircleRepresentation(settings));
+            Factory.RegisterCallback<TextRepresentation>((settings) => new TextRepresentation(settings));
             Factory.RegisterCallback<PhysicsRepresentation>((settings) => new PhysicsRepresentation());
             Factory.RegisterCallback<GameplayRepresentation>((settings) => new GameplayRepresentation());
         }
 
-        public static void LoadLevelOne()
+        public static void LoadMaze(int seed)
         {
             ClearLevel();
             //AddEntity<StaticSolid>("floor", new GameParams()
@@ -53,23 +59,68 @@ namespace RadKatanaBrothers
             //    {"deadly", true}
             //});
             Maze maze = new Maze();
-            List<GameParams> rectangles = maze.CreateMaze();
+            List<GameParams> rectangles = maze.CreateMaze(seed);
             for (int i = 0; i < rectangles.Count; ++i)
                 AddEntity<StaticSolid>("maze" + i, rectangles[i]);
-            //Random rand = new Random();
-            //for (int i = 0; i < 5; ++i)
-            //{
-            //    AddEntity<StaticSolid>("sun"+i, new GameParams()
-            //    {
-            //        {"collisionMaskVisible", true},
-            //        {"circleRadius", 25.0f + 50.0f * (float)rand.NextDouble()},
-            //        {"position", new Vector2(rand.Next(0, 720), rand.Next(0, 720))}
-            //    });
-            //}
             AddEntity<Player>("player", new GameParams()
             {
                 {"position", new Vector2(72, 72)}
             });
+            Random rand = new Random();
+            List<Vector2> usedPoints = new List<Vector2>();
+            for (int i = 0; i < 50; ++i)
+            {
+                int x, y;
+                do
+                {
+                    x = (2 * rand.Next(Maze.GRID_DIMENSIONS)) * Maze.CELL_SIZE;
+                    y = (2 * rand.Next(Maze.GRID_DIMENSIONS)) * Maze.CELL_SIZE;
+                } while (usedPoints.Contains(new Vector2(x, y)));
+                usedPoints.Add(new Vector2(x,y));
+                AddEntity<StaticSolid>("obstacle" + i, new GameParams()
+                {
+                    {"deadly", true},
+                    {"collisionMaskVisible", true},
+                    {"color", Color.Purple},
+                    {"polygonVertices", new List<Vector2>()
+                    {
+                        new Vector2(0, 0),
+                        new Vector2(Maze.CELL_SIZE, 0),
+                        new Vector2(Maze.CELL_SIZE, Maze.CELL_SIZE),
+                        new Vector2(0, Maze.CELL_SIZE)
+                    }}
+                });
+                GetEntity<StaticSolid>("obstacle" + i).AddProperty<Vector2>("position", new Vector2(x, y));
+
+            }
+            AddEntity<StaticSolid>("goal", new GameParams()
+            {
+                {"collisionMaskVisible", true},
+                {"polygonVertices", new List<Vector2>()
+                {
+                    new Vector2((Maze.GRID_DIMENSIONS - 1) * Maze.CELL_SIZE),
+                    new Vector2(Maze.GRID_DIMENSIONS * Maze.CELL_SIZE, (Maze.GRID_DIMENSIONS - 1) * Maze.CELL_SIZE),
+                    new Vector2(Maze.GRID_DIMENSIONS * Maze.CELL_SIZE),
+                    new Vector2((Maze.GRID_DIMENSIONS - 1) * Maze.CELL_SIZE, Maze.GRID_DIMENSIONS * Maze.CELL_SIZE)
+                }},
+                //{"polygonVertices", new List<Vector2>()
+                //{
+                //    new Vector2((Maze.GRID_DIMENSIONS - 2) * Maze.CELL_SIZE),
+                //    new Vector2(Maze.GRID_DIMENSIONS * Maze.CELL_SIZE, (Maze.GRID_DIMENSIONS - 2) * Maze.CELL_SIZE),
+                //    new Vector2(Maze.GRID_DIMENSIONS * Maze.CELL_SIZE),
+                //    new Vector2((Maze.GRID_DIMENSIONS - 2) * Maze.CELL_SIZE, Maze.GRID_DIMENSIONS * Maze.CELL_SIZE)
+                //}},
+                //{"polygonVertices", new List<Vector2>()
+                //{
+                //    new Vector2((Maze.GRID_DIMENSIONS - 2) * Maze.CELL_SIZE, (Maze.GRID_DIMENSIONS - 2) * Maze.CELL_SIZE),
+                //    new Vector2((Maze.GRID_DIMENSIONS - 1) * Maze.CELL_SIZE, (Maze.GRID_DIMENSIONS - 2) * Maze.CELL_SIZE),
+                //    new Vector2((Maze.GRID_DIMENSIONS - 1) * Maze.CELL_SIZE, (Maze.GRID_DIMENSIONS - 1) * Maze.CELL_SIZE),
+                //    new Vector2((Maze.GRID_DIMENSIONS - 2) * Maze.CELL_SIZE, (Maze.GRID_DIMENSIONS - 1) * Maze.CELL_SIZE)
+                //}},
+                {"color", Color.Red},
+                {"deadly", true}
+            });
+            GetEntity<StaticSolid>("goal").AddProperty<Vector2>("position", Vector2.Zero).Value -= new Vector2(Maze.CELL_SIZE);
 
             foreach (var entity in entities.Values)
                 entity.Initialize();

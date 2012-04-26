@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 namespace RadKatanaBrothers
 {
     //A procedurally generated maze
-    class Maze
+    public class Maze
     {
         public const int CELL_SIZE = 48; //The size of each cell
         public const int GRID_DIMENSIONS = 15; //The number of cells (must be odd and > 1)
@@ -100,9 +100,9 @@ namespace RadKatanaBrothers
             ResetMaze();
         }
 
-        public List<GameParams> CreateMaze()
+        public List<GameParams> CreateMaze(int seed)
         {
-            Random rand = new Random();
+            Random rand = new Random(seed);
             GenerateMaze(rand, 1, 1);
             List<GameParams> result = new List<GameParams>();
             Vector2 currentLeft;
