@@ -13,6 +13,7 @@ namespace RadKatanaBrothers
             if (settings == null)
                 settings = new GameParams();
             AddProperty<bool>("deadly", (bool)(settings["deadly"] ?? false));
+            AddProperty<bool>("victory", (bool)(settings["victory"] ?? false));
             bool collisionMaskVisible = (bool)(settings["collisionMaskVisible"] ?? false);
             if (settings["polygonVertices"] != null)
             {

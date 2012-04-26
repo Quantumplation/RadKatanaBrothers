@@ -36,9 +36,6 @@ namespace RadKatanaBrothers
             AddManager<RenderManager>(id: "graphics");
             AddManager<PhysicsManager>(id: "physics");
             AddManager<GameplayManager>(id: "gameplay");
-            AddManager<NetworkManager>(id: "network");
-            GetManager<NetworkManager>("network").Initialize();
-            Factory.RegisterManager<NetworkManager>(GetManager<NetworkManager>("network"), typeof(NetworkRepresentation));
             Factory.RegisterManager<RenderManager>(GetManager<RenderManager>(id: "graphics"), typeof(CircleRepresentation), typeof(MeshRepresentation), typeof(SpriteRepresentation), typeof(TextRepresentation));
             Factory.RegisterManager<PhysicsManager>(GetManager<PhysicsManager>(id: "physics"), typeof(PhysicsRepresentation));
             Factory.RegisterManager<GameplayManager>(GetManager<GameplayManager>(id: "gameplay"), typeof(GameplayRepresentation));
@@ -51,6 +48,9 @@ namespace RadKatanaBrothers
             Factory.RegisterCallback<TextRepresentation>((settings) => new TextRepresentation(settings));
             Factory.RegisterCallback<PhysicsRepresentation>((settings) => new PhysicsRepresentation());
             Factory.RegisterCallback<GameplayRepresentation>((settings) => new GameplayRepresentation());
+            AddManager<NetworkManager>(id: "network");
+            GetManager<NetworkManager>("network").Initialize();
+            Factory.RegisterManager<NetworkManager>(GetManager<NetworkManager>("network"), typeof(NetworkRepresentation));
             Factory.RegisterCallback<NetworkRepresentation>((settings) => new NetworkRepresentation(settings));
         }
 
@@ -65,13 +65,13 @@ namespace RadKatanaBrothers
                     AddEntity<StaticSolid>("maze" + i, rectangles[i]);
                 AddEntity<Player>("player1", new GameParams()
             {
-                {"position", new Vector2(72, 72)},
+                {"position", new Vector2(Maze.CELL_SIZE * 1.5f)},
                 {"remote", !NetworkManager.SERVER }
             });
 
                 AddEntity<Player>("player2", new GameParams()
             {
-                {"position", new Vector2(148, 72)},
+                {"position", new Vector2(Maze.CELL_SIZE * 3.5f, Maze.CELL_SIZE * 1.5f)},
                 {"remote", NetworkManager.SERVER}
             });
                 Random rand = new Random(seed);

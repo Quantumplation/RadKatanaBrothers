@@ -45,7 +45,7 @@ namespace RadKatanaBrothers
             {
                 updates["player1"] = Vector2.Zero;
                 Socket sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                sock.BeginConnect("localhost", 9001, OnConnected, sock);
+                sock.BeginConnect("128.238.243.78", 9001, OnConnected, sock);
             }
         }
 
@@ -77,7 +77,7 @@ namespace RadKatanaBrothers
             //}
         }
 
-        public const bool SERVER = true;
+        public const bool SERVER = false;
 
         public void UpdateProperty(string entityID, Vector2 position)
         {
@@ -146,7 +146,6 @@ namespace RadKatanaBrothers
                     if (mazeMade)
                         break;
                     World.Running = false;
-                    System.Threading.Thread.Sleep(5000);
                     World.LoadMaze(System.BitConverter.ToInt32(buffer, 1));
                     World.Running = true;
                     mazeMade = true;
