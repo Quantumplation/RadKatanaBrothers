@@ -104,7 +104,7 @@ namespace RadKatanaBrothers
             queueing = false;
             coPosition.Value -= queuedMovements;
             coAcceleration.Value = Vector2.Zero;
-            coVelocity.Value = Vector2.Zero;
+            coVelocity.Value *= 0.2f;
             queueing = true;
         }
 

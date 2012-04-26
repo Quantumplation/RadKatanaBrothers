@@ -77,7 +77,7 @@ namespace RadKatanaBrothers
             //}
         }
 
-        public const bool SERVER = false;
+        public const bool SERVER = true;
 
         public void UpdateProperty(string entityID, Vector2 position)
         {
@@ -88,7 +88,7 @@ namespace RadKatanaBrothers
             Array.Copy(encoding.GetBytes(entityID), 0, buffer, 1 + sizeof(int), entityID.Length);
             Array.Copy(BitConverter.GetBytes((double)position.X), 0, buffer, 1 + sizeof(int) + entityID.Length, sizeof(double));
             Array.Copy(BitConverter.GetBytes((double)position.Y), 0, buffer, 1 + sizeof(int) + entityID.Length + sizeof(double), sizeof(double));
-            connection.BeginSend(buffer, 0, 1024, SocketFlags.None, OnDataSent, null);
+            connection.BeginSend(buffer, 0, 1 + sizeof(int) + entityID.Length + sizeof(double) * 2, SocketFlags.None, OnDataSent, null);
         }
 
         public void OnDataSent(IAsyncResult ar)
@@ -123,7 +123,7 @@ namespace RadKatanaBrothers
                 int seed = rand.Next();
                 Array.Copy(BitConverter.GetBytes(seed), 0, buffer, 1, sizeof(int));
                 World.LoadMaze(seed);
-                connection.Send(buffer);
+                connection.Send(buffer, 1 + sizeof(int), SocketFlags.None);
                 Array.Clear(buffer, 0, 1024);
                 mazeMade = true;
             }
