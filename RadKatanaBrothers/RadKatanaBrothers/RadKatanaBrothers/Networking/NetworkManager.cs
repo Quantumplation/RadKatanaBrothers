@@ -135,6 +135,7 @@ namespace RadKatanaBrothers
             connection.BeginReceive(buffer, 0, 1024, SocketFlags.None, OnReceiveData, buffer);
         }
 
+        bool mazeMade = false;
         public void OnReceiveData(IAsyncResult ar)
         {
             connection.EndReceive(ar);
@@ -142,10 +143,13 @@ namespace RadKatanaBrothers
             switch ((MessageType)buffer[0])
             {
                 case MessageType.MazeSeed:
+                    if (mazeMade)
+                        break;
                     World.Running = false;
-                    System.Threading.Thread.Sleep(1000);
+                    System.Threading.Thread.Sleep(5000);
                     World.LoadMaze(System.BitConverter.ToInt32(buffer, 1));
                     World.Running = true;
+                    mazeMade = true;
                     break;
                 case MessageType.PlayerPosition:
                     int size = BitConverter.ToInt32(buffer, 1);
