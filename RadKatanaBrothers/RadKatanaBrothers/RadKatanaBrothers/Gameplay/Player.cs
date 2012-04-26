@@ -25,7 +25,9 @@ namespace RadKatanaBrothers
                 {"color", Color.Gainsboro}
             });
             AddRepresentation<PhysicsRepresentation>(id: "physics", settings: new GameParams());
-            AddRepresentation<GameplayRepresentation>(id: "gameplay", settings: new GameParams());
+            if(!(bool)(settings["remote"] ?? false))
+                AddRepresentation<GameplayRepresentation>(id: "gameplay", settings: new GameParams());
+            AddRepresentation<NetworkRepresentation>(id: "network", settings: new GameParams() { { "position", true } });
             AddRepresentation<TextRepresentation>(id: "text", settings: new GameParams());
             Events.AddEvent<Action<Entity>>("onCollision", (Entity other) =>
             {

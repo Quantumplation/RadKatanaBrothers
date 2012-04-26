@@ -41,7 +41,7 @@ namespace RadKatanaBrothers
             // TODO: Add your initialization logic here
             Random rand = new Random();
             World.Initialize();
-            World.LoadMaze(rand.Next());
+            //World.LoadMaze(rand.Next());
             World.Running = true;
             base.Initialize();
         }

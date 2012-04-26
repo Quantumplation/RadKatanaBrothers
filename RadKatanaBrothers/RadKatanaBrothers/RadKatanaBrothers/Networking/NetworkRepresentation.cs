@@ -2,41 +2,30 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
 
 namespace RadKatanaBrothers
 {
     public class NetworkRepresentation : Representation
     {
-        List<string> _settings;
-        Dictionary<IProperty, bool> _monitors;
+        Property<Vector2> position;
 
-        public IEnumerable<IProperty> Monitors
-        {
-            get { return _monitors.Where(o => o.Value).Select(o => o.Key); }
-        }
-
-        public void SetNeutral()
-        {
-            for (int x = 0; x < _monitors.Count; x++)
-                _monitors[_monitors.ElementAt(x).Key] = false;
-        }
 
         public NetworkRepresentation(GameParams settings = null)
         {
-            _monitors = new Dictionary<IProperty,bool>();
-            _settings = new List<string>();
-            foreach (var set in settings)
-                _settings.Add(set.Key);
+        }
+
+        public void Run(NetworkManager manager)
+        {
+            if (manager.HasProperty(Parent.ID))
+                position.Value = manager.ReadProperty(Parent.ID);
+            else
+                manager.UpdateProperty(Parent.ID, position.Value);
         }
 
         public override void Initialize()
         {
-            foreach (var set in _settings)
-            {
-                var prop = Parent.GetIProperty(set);
-                _monitors[prop] = true;
-                prop.PropertyChanged += (o, e) => _monitors[prop] = true;
-            }
+            position = Parent.AddProperty<Vector2>("position", Vector2.Zero);
         }
     }
 }

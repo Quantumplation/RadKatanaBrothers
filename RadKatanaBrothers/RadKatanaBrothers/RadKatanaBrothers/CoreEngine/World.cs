@@ -19,6 +19,12 @@ namespace RadKatanaBrothers
             set;
         }
 
+        public static bool Running
+        {
+            get;
+            set;
+        }
+
         public static void Initialize()
         {
             entities = new Dictionary<string, Entity>();
@@ -28,6 +34,9 @@ namespace RadKatanaBrothers
             AddManager<RenderManager>(id: "graphics");
             AddManager<PhysicsManager>(id: "physics");
             AddManager<GameplayManager>(id: "gameplay");
+            AddManager<NetworkManager>(id: "network");
+            GetManager<NetworkManager>("network").Initialize();
+            Factory.RegisterManager<NetworkManager>(GetManager<NetworkManager>("network"), typeof(NetworkRepresentation));
             Factory.RegisterManager<RenderManager>(GetManager<RenderManager>(id: "graphics"), typeof(CircleRepresentation), typeof(MeshRepresentation), typeof(SpriteRepresentation), typeof(TextRepresentation));
             Factory.RegisterManager<PhysicsManager>(GetManager<PhysicsManager>(id: "physics"), typeof(PhysicsRepresentation));
             Factory.RegisterManager<GameplayManager>(GetManager<GameplayManager>(id: "gameplay"), typeof(GameplayRepresentation));
@@ -40,6 +49,7 @@ namespace RadKatanaBrothers
             Factory.RegisterCallback<TextRepresentation>((settings) => new TextRepresentation(settings));
             Factory.RegisterCallback<PhysicsRepresentation>((settings) => new PhysicsRepresentation());
             Factory.RegisterCallback<GameplayRepresentation>((settings) => new GameplayRepresentation());
+            Factory.RegisterCallback<NetworkRepresentation>((settings) => new NetworkRepresentation(settings));
         }
 
         public static void LoadMaze(int seed)
@@ -49,9 +59,16 @@ namespace RadKatanaBrothers
             List<GameParams> rectangles = maze.CreateMaze(seed);
             for (int i = 0; i < rectangles.Count; ++i)
                 AddEntity<StaticSolid>("maze" + i, rectangles[i]);
-            AddEntity<Player>("player", new GameParams()
+            AddEntity<Player>("player1", new GameParams()
             {
-                {"position", new Vector2(72, 72)}
+                {"position", new Vector2(72, 72)},
+                {"remote", !NetworkManager.SERVER }
+            });
+
+            AddEntity<Player>("player2", new GameParams()
+            {
+                {"position", new Vector2(148, 72)},
+                {"remote", NetworkManager.SERVER}
             });
             Random rand = new Random(seed);
             List<Vector2> usedPoints = new List<Vector2>();
@@ -131,6 +148,8 @@ namespace RadKatanaBrothers
 
         public static void RunAllManagers(float elapsedMilliseconds)
         {
+            if (!Running)
+                return;
             foreach (var manager in managers.Values)
                 manager.Run(elapsedMilliseconds);
             if (Keyboard.GetState().IsKeyDown(Keys.Space) && !hack)
