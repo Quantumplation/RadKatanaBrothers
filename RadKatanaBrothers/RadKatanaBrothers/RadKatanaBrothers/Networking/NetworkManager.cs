@@ -9,23 +9,21 @@ namespace RadKatanaBrothers
 {
     public enum MessageType : byte
     {
-        MazeSeed,
-        PropertyUpdate,
+        MazeSeed = 0,
+        PlayerPosition
     }
 
     public class NetworkManager : Manager
     {
         Socket connection;
-        List<NetworkRepresentation> _networkedItems;
+
 
         public override void AddRepresentation(Representation rep)
         {
-            _networkedItems.Add(rep as NetworkRepresentation);
         }
 
         public NetworkManager()
         {
-            _networkedItems = new List<NetworkRepresentation>();
         }
 
         public void Initialize()
@@ -41,25 +39,26 @@ namespace RadKatanaBrothers
                 return;
             byte[] buffer = new byte[1024];
             int offset = 0;
-            foreach (var item in _networkedItems)
-            {
-                if (offset > 1024)
-                    break;
-                foreach (var monitor in item.Monitors)
-                {
-                    if (offset > 1024)
-                        break;
-                    offset += monitor.WriteTo(offset, ref buffer);
-                }
-                item.SetNeutral();
-            }
-
-            connection.BeginSend(buffer, 0, offset, SocketFlags.None, null, null);
+            //foreach (var item in _networkedItems)
+            //{
+            //    if (offset > 1024)
+            //        break;
+            //    foreach (var monitor in item.Monitors)
+            //    {
+            //        if (offset > 1024)
+            //            break;
+            //        Array.Clear(buffer, 0, 1024);
+            //        buffer[offset] = (byte)MessageType.PropertyUpdate;
+            //        offset += monitor.WriteTo(offset, ref buffer);
+            //        connection.BeginSend(buffer, 0, offset, SocketFlags.None, null, null);
+            //        offset = 0;
+            //    }
+            //    item.SetNeutral();
+            //}
         }
 
         public override void ClearRepresentations()
         {
-            throw new NotImplementedException();
         }
 
         public void OnConnection(IAsyncResult ar)
@@ -77,8 +76,10 @@ namespace RadKatanaBrothers
             switch ((MessageType)buffer[0])
             {
                 case MessageType.MazeSeed:
-                    break;
-                case MessageType.PropertyUpdate:
+                    World.Running = false;
+                    System.Threading.Thread.Sleep(1000);
+                    World.LoadMaze(System.BitConverter.ToInt32(buffer, 1));
+                    World.Running = true;
                     break;
             }
             Array.Clear(buffer, 0, 1024);

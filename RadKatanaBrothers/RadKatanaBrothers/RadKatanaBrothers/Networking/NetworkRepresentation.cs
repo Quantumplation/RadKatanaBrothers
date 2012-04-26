@@ -18,7 +18,7 @@ namespace RadKatanaBrothers
         public void SetNeutral()
         {
             for (int x = 0; x < _monitors.Count; x++)
-                _monitors[_monitors.ElementAt(x).Key] = true;
+                _monitors[_monitors.ElementAt(x).Key] = false;
         }
 
         public NetworkRepresentation(GameParams settings = null)
@@ -34,8 +34,8 @@ namespace RadKatanaBrothers
             foreach (var set in _settings)
             {
                 var prop = Parent.GetIProperty(set);
-                _monitors[prop] = false;
-                prop.PropertyChanged += (o, e) => _monitors[prop] = false;
+                _monitors[prop] = true;
+                prop.PropertyChanged += (o, e) => _monitors[prop] = true;
             }
         }
     }

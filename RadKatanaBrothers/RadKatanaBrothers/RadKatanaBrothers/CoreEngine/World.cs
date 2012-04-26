@@ -27,9 +27,12 @@ namespace RadKatanaBrothers
             AddManager<RenderManager>(id: "graphics");
             AddManager<PhysicsManager>(id: "physics");
             AddManager<GameplayManager>(id: "gameplay");
+            AddManager<NetworkManager>(id: "network");
+            GetManager<NetworkManager>(id: "network").Initialize();
             Factory.RegisterManager<RenderManager>(GetManager<RenderManager>(id: "graphics"), typeof(CircleRepresentation), typeof(MeshRepresentation), typeof(SpriteRepresentation), typeof(TextRepresentation));
             Factory.RegisterManager<PhysicsManager>(GetManager<PhysicsManager>(id: "physics"), typeof(PhysicsRepresentation));
             Factory.RegisterManager<GameplayManager>(GetManager<GameplayManager>(id: "gameplay"), typeof(GameplayRepresentation));
+            Factory.RegisterManager<NetworkManager>(GetManager<NetworkManager>(id: "network"), typeof(NetworkRepresentation));
             Factory.RegisterCallback<Entity>((settings) => new Entity(settings));
             Factory.RegisterCallback<Player>((settings) => new Player(settings));
             Factory.RegisterCallback<StaticSolid>((settings) => new StaticSolid(settings));
@@ -39,6 +42,7 @@ namespace RadKatanaBrothers
             Factory.RegisterCallback<TextRepresentation>((settings) => new TextRepresentation(settings));
             Factory.RegisterCallback<PhysicsRepresentation>((settings) => new PhysicsRepresentation());
             Factory.RegisterCallback<GameplayRepresentation>((settings) => new GameplayRepresentation());
+            Factory.RegisterCallback<NetworkRepresentation>((settings) => new NetworkRepresentation(settings));
         }
 
         public static void LoadMaze(int seed)
@@ -66,7 +70,7 @@ namespace RadKatanaBrothers
             {
                 {"position", new Vector2(72, 72)}
             });
-            Random rand = new Random();
+            Random rand = new Random(seed);
             List<Vector2> usedPoints = new List<Vector2>();
             for (int i = 0; i < 50; ++i)
             {
@@ -133,40 +137,6 @@ namespace RadKatanaBrothers
                 manager.ClearRepresentations();
         }
 
-        //public void LoadMap(string filename)
-        //{
-        //    XmlDocument doc = new XmlDocument();
-        //    try
-        //    {
-        //        doc.Load(filename + ".xml");
-        //        XmlNodeList loadEntities = doc.GetElementsByTagName("Entity");
-        //        foreach (XmlNode entity in loadEntities)
-        //        {
-        //            Entity newEntity = Factory.Produce(entity.Attributes["class"].Value) as Entity;
-        //            XmlNode node = entity.FirstChild;
-        //            do
-        //            {
-        //                if (node.Name == "Representation")
-        //                {
-        //                    // TODO: Pi
-        //                    GameParams Settings = new GameParams();
-        //                    foreach (XmlNode child in node.ChildNodes)
-        //                        Settings.Add(child.Name, Factory.Produce(child.Attributes["type"].Value, child.Attributes["value"].Value));
-        //                    newEntity.AddRepresentation(node.Attributes["type"].Value, node.Attributes["name"].Value, Settings);
-        //                }
-        //                node = node.NextSibling;
-        //            }
-        //            while (node != entity.LastChild);
-        //            //for (XmlNode node = entity.FirstChild; node != entity.LastChild; node = node.NextSibling)
-        //                //Add the representations
-        //        }
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        Console.WriteLine(e.Message);
-        //    }
-        //}
-
         public static void AddEntity<T>(string id, GameParams settings = null) where T : Entity
         {
             T entity = Factory.Produce<T>(settings);
@@ -188,8 +158,16 @@ namespace RadKatanaBrothers
             return (managers[id] as T);
         }
 
+        public static bool Running
+        {
+            get;
+            set;
+        }
+
         public static void RunAllManagers(float elapsedMilliseconds)
         {
+            if (!Running)
+                return;
             foreach (var manager in managers.Values)
                 manager.Run(elapsedMilliseconds);
             for (int i = 0; i < entitiesToRemove.Count; ++i)

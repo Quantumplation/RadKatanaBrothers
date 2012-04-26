@@ -47,6 +47,8 @@ namespace RadKatanaBrothers
                 {
                     var tuple = Tuple.Create(objB, objA);
                     List<Vector2> simplex;
+                    if (objA == null || objB == null)
+                        continue;
                     if (CheckCollision(objA.Geometry, objB.Geometry, out simplex) && objA != objB && !resolvedPairs.Contains(tuple))
                     {
                         // Collision response here: Need to implement the EPA algorithm

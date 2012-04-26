@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RadKatanaBrothers", "RadKatanaBrothers\RadKatanaBrothers\RadKatanaBrothers.csproj", "{694A0254-6BAE-4E38-9720-A6B795BCB70A}"
 EndProject
-Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "RadKatanaBrothersContent", "RadKatanaBrothers\RadKatanaBrothersContent\RadKatanaBrothersContent.contentproj", "{E16645AB-EF15-4260-9AD6-D048146107E9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RadKatanaBrothersContent", "RadKatanaBrothers\RadKatanaBrothersContent\RadKatanaBrothersContent.contentproj", "{E16645AB-EF15-4260-9AD6-D048146107E9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RKBTest", "RKBTest\RKBTest.csproj", "{577F77D8-3DDF-421D-AED3-48CF0AB43E49}"
 EndProject
@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		RadKatanaBrothers.vsmdi = RadKatanaBrothers.vsmdi
 		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestClient", "TestClient\TestClient.csproj", "{032EA6A4-E1AB-4332-851F-12C6061D64DC}"
 EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
@@ -53,6 +55,16 @@ Global
 		{577F77D8-3DDF-421D-AED3-48CF0AB43E49}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{577F77D8-3DDF-421D-AED3-48CF0AB43E49}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{577F77D8-3DDF-421D-AED3-48CF0AB43E49}.Release|x86.ActiveCfg = Release|Any CPU
+		{032EA6A4-E1AB-4332-851F-12C6061D64DC}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{032EA6A4-E1AB-4332-851F-12C6061D64DC}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{032EA6A4-E1AB-4332-851F-12C6061D64DC}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{032EA6A4-E1AB-4332-851F-12C6061D64DC}.Debug|x86.ActiveCfg = Debug|x86
+		{032EA6A4-E1AB-4332-851F-12C6061D64DC}.Debug|x86.Build.0 = Debug|x86
+		{032EA6A4-E1AB-4332-851F-12C6061D64DC}.Release|Any CPU.ActiveCfg = Release|x86
+		{032EA6A4-E1AB-4332-851F-12C6061D64DC}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{032EA6A4-E1AB-4332-851F-12C6061D64DC}.Release|Mixed Platforms.Build.0 = Release|x86
+		{032EA6A4-E1AB-4332-851F-12C6061D64DC}.Release|x86.ActiveCfg = Release|x86
+		{032EA6A4-E1AB-4332-851F-12C6061D64DC}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

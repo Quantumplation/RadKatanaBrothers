@@ -42,6 +42,7 @@ namespace RadKatanaBrothers
             Random rand = new Random();
             World.Initialize();
             World.LoadMaze(rand.Next());
+            World.Running = true;
             base.Initialize();
         }
 
