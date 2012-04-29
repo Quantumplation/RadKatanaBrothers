@@ -13,13 +13,15 @@ namespace RadKatanaBrothers
     public enum MessageType : byte
     {
         MazeSeed = 0,
-        PlayerPosition
+        PlayerPosition,
+        Score
     }
 
     public class NetworkManager : Manager
     {
         Socket connection;
         List<NetworkRepresentation> reps;
+        int score;
 
         public override void AddRepresentation(Representation rep)
         {
@@ -36,14 +38,14 @@ namespace RadKatanaBrothers
             updates = new Dictionary<string, Vector2>();
             if (SERVER)
             {
-                updates["player2"] = new Vector2(72, 72);
+                updates["player2"] = new Vector2(Maze.CELL_SIZE * 1.5f, Maze.CELL_SIZE * 13.5f);
                 TcpListener listener = new TcpListener(IPAddress.Any, 9001);
                 listener.Start();
                 listener.BeginAcceptSocket(OnConnection, listener);
             }
             else
             {
-                updates["player1"] = new Vector2(72, 72);
+                updates["player1"] = new Vector2(Maze.CELL_SIZE * 13.5f, Maze.CELL_SIZE * 1.5f);
                 Socket sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 sock.BeginConnect("128.238.243.78", 9001, OnConnected, sock);
             }
@@ -79,6 +81,14 @@ namespace RadKatanaBrothers
 
         public const bool SERVER = true;
 
+        public void UpdateScore(int score)
+        {
+            byte[] buffer = new byte[1024];
+            buffer[0] = 2;
+            Array.Copy(BitConverter.GetBytes(score), 0, buffer, 1, sizeof(int));
+            connection.BeginSend(buffer, 0, 1 + sizeof(int), SocketFlags.None, OnDataSent, null);
+        }
+
         public void UpdateProperty(string entityID, Vector2 position)
         {
             byte[] buffer = new byte[1024];
@@ -105,6 +115,11 @@ namespace RadKatanaBrothers
         public Vector2 ReadProperty(string entityID)
         {
             return updates[entityID];
+        }
+
+        public int ReadScore()
+        {
+            return score;
         }
 
         public override void ClearRepresentations()
@@ -163,6 +178,9 @@ namespace RadKatanaBrothers
                         double y = BitConverter.ToDouble(buffer, 5 + size + sizeof(double));
                         updates[id] = new Vector2((float)x, (float)y);
                     }
+                    break;
+                case MessageType.Score:
+                    score = BitConverter.ToInt32(buffer, 1);
                     break;
             }
             Array.Clear(buffer, 0, 1024);

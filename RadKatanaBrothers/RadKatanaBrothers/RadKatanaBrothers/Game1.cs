@@ -25,6 +25,7 @@ namespace RadKatanaBrothers
             Window.Title = "Rad Katana Bros. and the Insane Jetpack of Magic";
             graphics.PreferredBackBufferWidth = 720;
             graphics.PreferredBackBufferHeight = 720;
+//            graphics.IsFullScreen = true;
             graphics.ApplyChanges();
             IsMouseVisible = true;
             Content.RootDirectory = "Content";
@@ -40,7 +41,7 @@ namespace RadKatanaBrothers
         {
             // TODO: Add your initialization logic here
             Random rand = new Random();
-            World.Initialize();
+            World.Initialize(true);
             //World.LoadMaze(rand.Next());
             World.Running = true;
             base.Initialize();

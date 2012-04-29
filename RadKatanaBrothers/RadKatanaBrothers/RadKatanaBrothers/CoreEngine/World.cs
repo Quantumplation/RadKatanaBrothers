@@ -21,7 +21,7 @@ namespace RadKatanaBrothers
             set { lock (lockObj) { running = value; } }
         }
 
-        public static void Initialize()
+        public static void Initialize(bool networked = false)
         {
             lockObj = new Int32();
             entities = new Dictionary<string, Entity>();
@@ -43,10 +43,13 @@ namespace RadKatanaBrothers
             Factory.RegisterCallback<TextRepresentation>((settings) => new TextRepresentation(settings));
             Factory.RegisterCallback<PhysicsRepresentation>((settings) => new PhysicsRepresentation());
             Factory.RegisterCallback<GameplayRepresentation>((settings) => new GameplayRepresentation());
-            AddManager<NetworkManager>(id: "network");
-            GetManager<NetworkManager>("network").Initialize();
-            Factory.RegisterManager<NetworkManager>(GetManager<NetworkManager>("network"), typeof(NetworkRepresentation));
-            Factory.RegisterCallback<NetworkRepresentation>((settings) => new NetworkRepresentation(settings));
+            if (networked)
+            {
+                AddManager<NetworkManager>(id: "network");
+                GetManager<NetworkManager>("network").Initialize();
+                Factory.RegisterManager<NetworkManager>(GetManager<NetworkManager>("network"), typeof(NetworkRepresentation));
+                Factory.RegisterCallback<NetworkRepresentation>((settings) => new NetworkRepresentation(settings));
+            }
         }
 
         public static void LoadMaze(int seed)
@@ -60,7 +63,7 @@ namespace RadKatanaBrothers
                     AddEntity<StaticSolid>("maze" + i, rectangles[i]);
                 AddEntity<Player>("player1", new GameParams()
             {
-                {"position", new Vector2(Maze.CELL_SIZE * 1.5f)},
+                {"position", new Vector2(Maze.CELL_SIZE * 1.5f, Maze.CELL_SIZE * 1.5f)},
                 {"remote", !NetworkManager.SERVER }
             });
 
